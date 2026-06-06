@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistMono.variable} ${inter.variable}`}>
-      <body className="min-h-screen bg-background text-foreground scanlines grid-overlay">
+      <body className="min-h-screen bg-background text-foreground">
         <Navigation />
         <main className="relative">{children}</main>
       </body>

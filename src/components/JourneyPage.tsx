@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { ChevronDown, ChevronRight, Check, Sparkles, Target, Clock } from "lucide-react";
+import { ChevronDown, ChevronRight, Check } from "lucide-react";
 import { journey, getTotalTasks, getPhaseTaskCount, type Phase, type Goal } from "@/data/journey";
 
 const STORAGE_KEY = "threshold-journey-progress";
@@ -25,59 +25,47 @@ function saveProgress(progress: Record<string, boolean>) {
 }
 
 function getCompletionMessage(percent: number): string {
-  if (percent === 0) return "Awaiting deployment...";
-  if (percent < 10) return "Mission initiated. Stay focused.";
-  if (percent < 25) return "Foundation laid. Keep building.";
-  if (percent < 50) return "Making real progress. The Backrooms are waiting.";
-  if (percent < 75) return "Over halfway there. You're doing something right.";
-  if (percent < 100) return "Almost there. Don't stop now.";
-  return "MISSION COMPLETE. You shipped it.";
+  if (percent === 0) return "Awaiting deployment.";
+  if (percent < 10) return "Mission initiated.";
+  if (percent < 25) return "Foundation laid.";
+  if (percent < 50) return "Making progress.";
+  if (percent < 75) return "Over halfway.";
+  if (percent < 100) return "Almost there.";
+  return "Complete.";
 }
 
 function TaskCheckbox({
   taskId,
   label,
-  hint,
   checked,
   onToggle,
 }: {
   taskId: string;
   label: string;
-  hint?: string;
   checked: boolean;
   onToggle: (id: string) => void;
 }) {
   return (
     <button
       onClick={() => onToggle(taskId)}
-      className={`group flex items-start gap-3 w-full text-left px-3 py-2.5 rounded transition-all duration-200 ${
-        checked
-          ? "bg-tactical-green/5 border border-tactical-green/20"
-          : "bg-steel-dark/30 border border-steel-light/5 hover:border-steel-light/15 hover:bg-steel-dark/50"
-      }`}
+      className="group flex items-center gap-4 w-full text-left py-2 transition-all duration-300"
     >
-      <div className={`mt-0.5 flex-shrink-0 w-4 h-4 rounded border flex items-center justify-center transition-all duration-200 ${
-        checked
-          ? "bg-tactical-green border-tactical-green"
-          : "border-steel-light/30 group-hover:border-amber-dim/50"
-      }`}>
-        {checked && <Check size={10} className="text-white" />}
+      <div
+        className={`flex-shrink-0 w-[14px] h-[14px] rounded-sm border transition-all duration-300 flex items-center justify-center ${
+          checked
+            ? "bg-foreground border-foreground"
+            : "border-foreground/20 group-hover:border-foreground/40"
+        }`}
+      >
+        {checked && <Check size={9} className="text-background" strokeWidth={3} />}
       </div>
-      <div className="flex-1 min-w-0">
-        <span className={`text-sm leading-relaxed transition-all duration-200 ${
-          checked ? "text-steel-light/50 line-through" : "text-foreground/90"
-        }`}>
-          {label}
-        </span>
-        {hint && (
-          <span className="block mt-0.5 font-mono text-[10px] text-steel-light/40 tracking-wider">
-            {hint}
-          </span>
-        )}
-      </div>
-      {checked && (
-        <Sparkles size={12} className="mt-0.5 text-tactical-green/60 flex-shrink-0" />
-      )}
+      <span
+        className={`text-[13px] leading-none transition-all duration-300 ${
+          checked ? "text-foreground/25 line-through" : "text-foreground/70 group-hover:text-foreground/90"
+        }`}
+      >
+        {label}
+      </span>
     </button>
   );
 }
@@ -94,70 +82,61 @@ function GoalCard({
   const [isOpen, setIsOpen] = useState(true);
   const completed = goal.tasks.filter((t) => progress[t.id]).length;
   const total = goal.tasks.length;
-  const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
   const isComplete = completed === total;
 
   return (
-    <div className={`border rounded transition-all duration-300 ${
-      isComplete
-        ? "border-tactical-green/30 bg-tactical-green/5"
-        : "border-steel-light/10 bg-steel-dark/20"
-    }`}>
+    <div className="py-6">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 px-4 py-3 text-left"
+        className="w-full flex items-center gap-4 text-left group"
       >
-        <div className={`flex-shrink-0 w-5 h-5 rounded flex items-center justify-center transition-all ${
-          isComplete
-            ? "bg-tactical-green"
-            : "bg-steel-dark border border-steel-light/20"
-        }`}>
-          {isComplete ? (
-            <Check size={12} className="text-white" />
-          ) : (
-            <span className="font-mono text-[9px] text-amber-dim">{completed}/{total}</span>
-          )}
-        </div>
-
         <div className="flex-1 min-w-0">
-          <h4 className={`text-sm font-medium ${isComplete ? "text-tactical-green/80" : "text-foreground"}`}>
-            {goal.title}
-          </h4>
-          <p className="font-mono text-[10px] text-steel-light/50 mt-0.5">{goal.description}</p>
+          <div className="flex items-center gap-3">
+            <h4
+              className={`text-[13px] font-medium tracking-wide transition-colors duration-300 ${
+                isComplete ? "text-foreground/30" : "text-foreground/80"
+              }`}
+            >
+              {goal.title}
+            </h4>
+            {isComplete && (
+              <span className="font-mono text-[9px] text-foreground/20 tracking-[0.15em]">
+                DONE
+              </span>
+            )}
+          </div>
+          <p className="font-mono text-[10px] text-foreground/20 mt-1 tracking-wide">
+            {goal.description}
+          </p>
         </div>
 
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <div className="w-16 h-1 bg-steel-dark rounded-full overflow-hidden">
-            <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                isComplete ? "bg-tactical-green" : "bg-amber"
-              }`}
-              style={{ width: `${percent}%` }}
-            />
-          </div>
-          <span className="font-mono text-[10px] text-steel-light/40 w-8 text-right">{percent}%</span>
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <span className="font-mono text-[10px] text-foreground/20">
+            {completed}/{total}
+          </span>
           {isOpen ? (
-            <ChevronDown size={14} className="text-steel-light/30" />
+            <ChevronDown size={12} className="text-foreground/15" />
           ) : (
-            <ChevronRight size={14} className="text-steel-light/30" />
+            <ChevronRight size={12} className="text-foreground/15" />
           )}
         </div>
       </button>
 
       {isOpen && (
-        <div className="px-4 pb-3 grid gap-1">
+        <div className="mt-4 ml-1">
           {goal.tasks.map((task) => (
             <TaskCheckbox
               key={task.id}
               taskId={task.id}
               label={task.label}
-              hint={task.hint}
               checked={!!progress[task.id]}
               onToggle={onToggle}
             />
           ))}
         </div>
       )}
+
+      <div className="mt-6 h-px bg-foreground/[0.04]" />
     </div>
   );
 }
@@ -182,88 +161,78 @@ function PhaseSection({
   const isActive = completedTasks > 0 && !isComplete;
 
   return (
-    <div className={`border rounded-lg transition-all duration-300 ${
-      isComplete
-        ? "border-tactical-green/30"
-        : isActive
-        ? "border-amber/30 glow-amber"
-        : "border-steel-light/10"
-    }`}>
+    <div className="py-10 md:py-14">
+      {/* Phase header */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-4 px-5 py-4 text-left"
+        className="w-full text-left group"
       >
-        {/* Phase number */}
-        <div className={`flex-shrink-0 w-10 h-10 rounded flex items-center justify-center font-mono text-sm font-bold ${
-          isComplete
-            ? "bg-tactical-green/20 text-tactical-green border border-tactical-green/30"
-            : isActive
-            ? "bg-amber/20 text-amber border border-amber/30"
-            : "bg-steel-dark text-steel-light/50 border border-steel-light/10"
-        }`}>
-          {isComplete ? <Check size={18} /> : phase.code}
+        <div className="flex items-baseline gap-4 mb-2">
+          <span className="font-mono text-[10px] text-foreground/20 tracking-[0.2em]">
+            {phase.code}
+          </span>
+          <h2
+            className={`text-2xl md:text-3xl font-light tracking-tight transition-colors duration-300 ${
+              isComplete ? "text-foreground/30" : "text-foreground/90"
+            }`}
+          >
+            {phase.title}
+          </h2>
+          {isComplete && (
+            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] ml-2">
+              COMPLETE
+            </span>
+          )}
+          {isActive && (
+            <span className="font-mono text-[9px] text-amber/60 tracking-[0.2em] ml-2">
+              ACTIVE
+            </span>
+          )}
         </div>
 
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h3 className={`text-lg font-bold ${isComplete ? "text-tactical-green/80" : "text-foreground"}`}>
-              {phase.title}
-            </h3>
-            {isComplete && (
-              <span className="px-2 py-0.5 bg-tactical-green/10 border border-tactical-green/20 font-mono text-[9px] text-tactical-green tracking-wider">
-                COMPLETE
-              </span>
-            )}
-            {isActive && (
-              <span className="px-2 py-0.5 bg-amber/10 border border-amber/20 font-mono text-[9px] text-amber tracking-wider animate-pulse-amber">
-                ACTIVE
-              </span>
-            )}
-          </div>
-          <p className="font-mono text-[11px] text-steel-light/50 mt-0.5">{phase.subtitle}</p>
-        </div>
+        <p className="font-mono text-[11px] text-foreground/25 tracking-wide max-w-xl leading-relaxed">
+          {phase.subtitle}
+        </p>
 
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <div className="hidden sm:flex items-center gap-2 text-steel-light/40">
-            <Clock size={12} />
-            <span className="font-mono text-[10px]">{phase.estimatedWeeks}</span>
-          </div>
-          <div className="w-24 h-1.5 bg-steel-dark rounded-full overflow-hidden">
+        {/* Progress bar — minimal */}
+        <div className="flex items-center gap-4 mt-4">
+          <div className="flex-1 h-px bg-foreground/[0.06] overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all duration-700 ${
-                isComplete ? "bg-tactical-green" : "bg-amber"
+              className={`h-full transition-all duration-700 ${
+                isComplete ? "bg-foreground/20" : "bg-amber/40"
               }`}
               style={{ width: `${percent}%` }}
             />
           </div>
-          <span className="font-mono text-xs text-steel-light/50 w-12 text-right">
+          <span className="font-mono text-[10px] text-foreground/20 tabular-nums">
             {completedTasks}/{totalTasks}
           </span>
-          {isOpen ? (
-            <ChevronDown size={16} className="text-steel-light/30" />
-          ) : (
-            <ChevronRight size={16} className="text-steel-light/30" />
-          )}
         </div>
       </button>
 
+      {/* Phase content */}
       {isOpen && (
-        <div className="px-5 pb-5 space-y-3">
-          <p className="font-mono text-xs text-steel-light/40 leading-relaxed">
+        <div className="mt-6">
+          <p className="font-mono text-[11px] text-foreground/20 leading-relaxed max-w-2xl mb-4">
             {phase.description}
           </p>
-          <div className="space-y-3">
-            {phase.goals.map((goal) => (
-              <GoalCard
-                key={goal.id}
-                goal={goal}
-                progress={progress}
-                onToggle={onToggle}
-              />
-            ))}
+          <div className="font-mono text-[10px] text-foreground/15 tracking-wider mb-2">
+            {phase.estimatedWeeks}
           </div>
+
+          {phase.goals.map((goal) => (
+            <GoalCard
+              key={goal.id}
+              goal={goal}
+              progress={progress}
+              onToggle={onToggle}
+            />
+          ))}
         </div>
       )}
+
+      {/* Section divider */}
+      <div className="h-px bg-foreground/[0.06]" />
     </div>
   );
 }
@@ -273,24 +242,17 @@ export default function JourneyPage() {
     if (typeof window === "undefined") return {};
     return loadProgress();
   });
-  const [celebrateId, setCelebrateId] = useState<string | null>(null);
 
   const toggleTask = useCallback((taskId: string) => {
     setProgress((prev) => {
       const next = { ...prev, [taskId]: !prev[taskId] };
       saveProgress(next);
-
-      if (next[taskId]) {
-        setCelebrateId(taskId);
-        setTimeout(() => setCelebrateId(null), 600);
-      }
-
       return next;
     });
   }, []);
 
   const resetProgress = useCallback(() => {
-    if (confirm("Reset all progress? This cannot be undone.")) {
+    if (confirm("Reset all progress?")) {
       setProgress({});
       saveProgress({});
     }
@@ -301,124 +263,125 @@ export default function JourneyPage() {
   const overallPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   return (
-    <div className="min-h-screen px-4 md:px-8 lg:px-16 py-8 md:py-12">
-      {/* Header */}
-      <div className="mb-10">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="font-mono text-[10px] text-amber-dim/60 tracking-[0.3em]">SECTION 09</span>
-          <div className="flex-1 h-px bg-amber/10" />
-          <div className="w-1.5 h-1.5 bg-amber/40 rotate-45" />
-        </div>
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground mb-3">
-          Dev <span className="text-amber glow-text">Journey</span>
-        </h1>
-        <p className="font-mono text-sm text-steel-light tracking-wide max-w-2xl">
-          From zero UE5 knowledge to a playable THRESHOLD demo. Check off tasks as you go.
-          Progress saves locally in your browser.
-        </p>
-      </div>
-
-      {/* Overall Progress Bar */}
-      <div className="mb-10 bg-steel-dark/30 border border-steel-light/10 rounded-lg p-5 corner-brackets">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Target size={16} className="text-amber" />
-            <span className="font-mono text-xs text-amber-dim tracking-wider">OVERALL PROGRESS</span>
-          </div>
-          <span className="font-mono text-2xl font-bold text-amber">{overallPercent}%</span>
-        </div>
-
-        <div className="w-full h-3 bg-steel-dark rounded-full overflow-hidden mb-3">
-          <div
-            className="h-full rounded-full transition-all duration-700 ease-out"
-            style={{
-              width: `${overallPercent}%`,
-              background: overallPercent === 100
-                ? "linear-gradient(90deg, #27ae60, #2ecc71)"
-                : "linear-gradient(90deg, #8b6914, #d4a017)",
-            }}
-          />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <p className="font-mono text-[11px] text-steel-light/50">
-            {getCompletionMessage(overallPercent)}
+    <div className="min-h-screen">
+      {/* Hero — large whitespace */}
+      <div className="px-6 md:px-12 lg:px-24 pt-20 md:pt-32 pb-16 md:pb-24">
+        <div className="max-w-3xl">
+          <span className="font-mono text-[10px] text-foreground/15 tracking-[0.3em] block mb-8">
+            09 / JOURNEY
+          </span>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-foreground/90 mb-6">
+            Dev Journey
+          </h1>
+          <p className="text-base md:text-lg text-foreground/30 font-light leading-relaxed max-w-xl">
+            From zero UE5 knowledge to a playable demo.
+            Check off tasks as you go. Progress saves locally.
           </p>
-          <div className="flex items-center gap-4">
-            <span className="font-mono text-[10px] text-steel-light/40">
-              {completedTasks} / {totalTasks} tasks
-            </span>
-            <button
-              onClick={resetProgress}
-              className="font-mono text-[10px] text-tactical-red/50 hover:text-tactical-red transition-colors tracking-wider"
-            >
-              RESET
-            </button>
-          </div>
-        </div>
-
-        {/* Phase dots */}
-        <div className="flex gap-1 mt-4">
-          {journey.map((phase) => {
-            const phaseTotal = getPhaseTaskCount(phase.id);
-            const phaseCompleted = phase.goals.reduce(
-              (acc, goal) => acc + goal.tasks.filter((t) => progress[t.id]).length,
-              0
-            );
-            const phasePercent = phaseTotal > 0 ? (phaseCompleted / phaseTotal) * 100 : 0;
-            return (
-              <div
-                key={phase.id}
-                className="flex-1 h-1 rounded-full overflow-hidden bg-steel-dark"
-                title={`${phase.title}: ${Math.round(phasePercent)}%`}
-              >
-                <div
-                  className={`h-full rounded-full transition-all duration-500 ${
-                    phasePercent === 100 ? "bg-tactical-green" : "bg-amber"
-                  }`}
-                  style={{ width: `${phasePercent}%` }}
-                />
-              </div>
-            );
-          })}
         </div>
       </div>
 
-      {/* Celebration flash */}
-      {celebrateId && (
-        <div className="fixed inset-0 pointer-events-none z-50">
-          <div className="absolute inset-0 bg-tactical-green/5 animate-pulse" />
+      {/* Overall progress — clean, minimal */}
+      <div className="px-6 md:px-12 lg:px-24 pb-16 md:pb-24">
+        <div className="max-w-3xl">
+          <div className="flex items-baseline justify-between mb-4">
+            <span className="font-mono text-[10px] text-foreground/20 tracking-[0.2em]">
+              OVERALL
+            </span>
+            <span className="font-mono text-3xl md:text-4xl font-light text-foreground/80 tabular-nums">
+              {overallPercent}
+              <span className="text-foreground/20">%</span>
+            </span>
+          </div>
+
+          <div className="w-full h-[3px] bg-foreground/[0.04] rounded-full overflow-hidden mb-4">
+            <div
+              className="h-full rounded-full transition-all duration-700 ease-out"
+              style={{
+                width: `${overallPercent}%`,
+                background: overallPercent === 100
+                  ? "rgba(232, 230, 227, 0.4)"
+                  : "rgba(212, 160, 23, 0.5)",
+              }}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-[11px] text-foreground/20">
+              {getCompletionMessage(overallPercent)}
+            </span>
+            <div className="flex items-center gap-6">
+              <span className="font-mono text-[10px] text-foreground/15 tabular-nums">
+                {completedTasks} / {totalTasks}
+              </span>
+              <button
+                onClick={resetProgress}
+                className="font-mono text-[10px] text-foreground/15 hover:text-foreground/40 transition-colors tracking-[0.15em]"
+              >
+                RESET
+              </button>
+            </div>
+          </div>
+
+          {/* Phase segments */}
+          <div className="flex gap-[2px] mt-8">
+            {journey.map((phase) => {
+              const phaseTotal = getPhaseTaskCount(phase.id);
+              const phaseCompleted = phase.goals.reduce(
+                (acc, goal) => acc + goal.tasks.filter((t) => progress[t.id]).length,
+                0
+              );
+              const phasePercent = phaseTotal > 0 ? (phaseCompleted / phaseTotal) * 100 : 0;
+              return (
+                <div
+                  key={phase.id}
+                  className="flex-1 h-[2px] rounded-full overflow-hidden bg-foreground/[0.04]"
+                  title={`${phase.title}: ${Math.round(phasePercent)}%`}
+                >
+                  <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{
+                      width: `${phasePercent}%`,
+                      background: phasePercent === 100
+                        ? "rgba(232, 230, 227, 0.25)"
+                        : "rgba(212, 160, 23, 0.4)",
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
-      )}
+      </div>
 
       {/* Phases */}
-      <div className="space-y-4">
-        {journey.map((phase) => (
-          <PhaseSection
-            key={phase.id}
-            phase={phase}
-            progress={progress}
-            onToggle={toggleTask}
-          />
-        ))}
+      <div className="px-6 md:px-12 lg:px-24">
+        <div className="max-w-3xl">
+          {journey.map((phase) => (
+            <PhaseSection
+              key={phase.id}
+              phase={phase}
+              progress={progress}
+              onToggle={toggleTask}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Footer */}
-      <div className="mt-12 pt-6 border-t border-steel-light/10">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="font-mono text-[10px] text-steel-light/30 tracking-wider">
-            <span>THRESHOLD — DEV JOURNEY</span>
-            <span className="mx-2">|</span>
-            <span>PROGRESS SAVED LOCALLY</span>
-            <span className="mx-2">|</span>
-            <span>NORTHEM DEVELOPMENTS</span>
-          </div>
-          <div className="font-mono text-[10px] text-steel-light/20">
-            {new Date().toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+      <div className="px-6 md:px-12 lg:px-24 py-16 md:py-24">
+        <div className="max-w-3xl">
+          <div className="h-px bg-foreground/[0.06] mb-8" />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <span className="font-mono text-[9px] text-foreground/10 tracking-[0.2em]">
+              THRESHOLD — NORTHEM DEVELOPMENTS
+            </span>
+            <span className="font-mono text-[9px] text-foreground/10 tracking-[0.2em]">
+              {new Date().toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
           </div>
         </div>
       </div>

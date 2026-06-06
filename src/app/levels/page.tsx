@@ -2,20 +2,16 @@
 
 import { useState } from "react";
 import SectionHeader from "@/components/SectionHeader";
-import { ChevronDown, ChevronUp, AlertTriangle, Clock, Users, Crosshair } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 const levels = [
   {
     id: "0",
     name: "The Lobby",
     subtitle: "The Breach",
-    duration: "60-90 min",
+    duration: "60–90 min",
     difficulty: "Low",
-    entityDensity: "Very Low",
-    combatViability: "High",
-    sanityImpact: "Mild unease",
     color: "#d4a017",
-    bg: "rgba(212, 160, 23, 0.06)",
     environment: "Mono-yellow wallpaper, moist carpet, fluorescent lighting",
     tone: "Confident, tactical, slightly uncanny",
     description: "Tutorial/Tactical Intro. The squad enters the Backrooms with full confidence. Movement is crisp, weapons are powerful, squad AI is responsive. The first signs of wrongness appear at the edges.",
@@ -33,8 +29,6 @@ const levels = [
       "Extraction point discovery with dead Async specialist",
       "Radio death",
     ],
-    collectibles: "6 items: Async Field Manual, Survivor Journal pages, Extraction Beacon Log, Reyes's Photo 1 (shows a sixth figure behind the squad)",
-    colorProgression: "Warm yellows, sterile whites, tactical greens (confidence)",
     tacticalStatus: "Full functionality. Squad responsive. Comms clear.",
     keyDesign: "Open, navigable spaces. Warm yellow palette. Confidence before the fall.",
   },
@@ -42,13 +36,9 @@ const levels = [
     id: "1",
     name: "Habitable Zone",
     subtitle: "Reality Check",
-    duration: "90-120 min",
+    duration: "90–120 min",
     difficulty: "Medium",
-    entityDensity: "Moderate",
-    combatViability: "Medium-High",
-    sanityImpact: "Growing paranoia",
     color: "#e67e22",
-    bg: "rgba(230, 126, 34, 0.06)",
     environment: "Industrial warehouse spaces, concrete, metal shelving",
     tone: "Unease, first real threats",
     description: "Industrial Horror. The environment becomes hostile. Equipment fails, the Survivor reveals the 3.7% statistic, and Dr. Thorne begins to crack.",
@@ -68,8 +58,6 @@ const levels = [
       "Dr. Voss's carving: 'I'm sorry. I thought I could control it.'",
       "Descent to Level 2 through climbing shaft",
     ],
-    collectibles: "Three-path junction choice (Storage/combat, Maintenance/dangerous, Administration/lore)",
-    colorProgression: "Industrial greys, warning oranges, cold fluorescents (unease)",
     tacticalStatus: "Comms occasionally static. Squad AI hesitates.",
     keyDesign: "Three-zone structure fully realized. Player choice in routing.",
   },
@@ -77,13 +65,9 @@ const levels = [
     id: "2",
     name: "Pipe Dreams",
     subtitle: "Suffocation",
-    duration: "90-120 min",
+    duration: "90–120 min",
     difficulty: "High",
-    entityDensity: "High",
-    combatViability: "Medium",
-    sanityImpact: "Significant stress",
     color: "#c0392b",
-    bg: "rgba(192, 57, 43, 0.06)",
     environment: "Narrow maintenance corridors, exposed piping, ankle-deep fluid",
     tone: "Claustrophobic, desperate",
     description: "Claustrophobic Survival. Corridors narrow progressively. Kade is separated and returns changed. The Pipe Crawler nest is a masterclass in tension.",
@@ -103,8 +87,6 @@ const levels = [
       "Kade's moment of clarity with the Pipe Crawler",
       "Level 3 skip: 'The floor indicator counts up: 2...3...4...Then letters: A...B...C...Then symbols that don't exist.'",
     ],
-    collectibles: "Valve puzzle (4 valves, correct combination opens path)",
-    colorProgression: "Rust browns, pipe metal, darkness, emergency red (claustrophobia)",
     tacticalStatus: "Formations impossible. Comms break up. Revive time extended to 12s.",
     keyDesign: "Progressive corridor narrowing (1.5m → 1.2m → 1.0m → 0.9m). Single-file-only movement.",
   },
@@ -112,13 +94,9 @@ const levels = [
     id: "4",
     name: "Abandoned Office",
     subtitle: "Descent",
-    duration: "90-120 min",
+    duration: "90–120 min",
     difficulty: "Extreme",
-    entityDensity: "Moderate but deceptive",
-    combatViability: "Low",
-    sanityImpact: "Severe degradation",
     color: "#2980b9",
-    bg: "rgba(41, 128, 185, 0.06)",
     environment: "Desaturated office park, cubicles, conference rooms",
     tone: "Psychological warfare, paranoia",
     description: "Psychological Warfare. The Backrooms know the squad personally. Doppelgangers mimic them. Reyes disappears. Thorne confesses everything.",
@@ -139,8 +117,6 @@ const levels = [
       "Reyes's final moments: 'The hum isn't noise. It's music. And I finally know the words.'",
       "Vance's pre-Level 11 speech",
     ],
-    collectibles: "Player choice: Spare or execute Thorne (affects endings and Async tech availability)",
-    colorProgression: "Muted blues, sickly greens, shadow, monitor glow (paranoia)",
     tacticalStatus: "Squad AI unreliable. Doppelgangers mimic squad callouts.",
     keyDesign: "Personal horror. The environment uses squad members' memories against them.",
   },
@@ -148,13 +124,9 @@ const levels = [
     id: "11",
     name: "The Infinite City",
     subtitle: "Terminus",
-    duration: "60-90 min",
+    duration: "60–90 min",
     difficulty: "Maximum",
-    entityDensity: "Variable",
-    combatViability: "Desperate",
-    sanityImpact: "Existential crisis",
     color: "#8e44ad",
-    bg: "rgba(142, 68, 173, 0.06)",
     environment: "Endless urban landscape",
     tone: "Apocalyptic, resigned, transcendent",
     description: "Urban Apocalypse. The final level. An infinite city stretches in every direction. The squad confronts the truth about Operation THRESHOLD and makes their final choice.",
@@ -174,120 +146,95 @@ const levels = [
       "The Threshold Room: 'BREACH REQUIRES LIVING MASS + CONSCIOUS INTENT. SACRIFICE MANDATORY. ONE ENTERS. OTHERS EXIT.'",
       "Five possible endings",
     ],
-    collectibles: "Five endings: Thorne Sacrifices, Holt Sacrifices, Vance Sacrifices, The Tear (secret), The Acclimation",
-    colorProgression: "Ash grey, neon flickers, void black, fire orange (apocalypse)",
     tacticalStatus: "No formations. Comms one-way only. Stealth detection nearly impossible.",
     keyDesign: "Overwhelming scale. The horror of infinity. The final choice.",
   },
 ];
 
+const endings = [
+  { name: "Thorne Sacrifices", desc: "Opens exit, dies screaming/laughing. Post-credits: his voice from inside.", color: "#c0392b" },
+  { name: "Holt Sacrifices", desc: "Restrains Vance, steps in. 'Tell my mother I wasn't running.'", color: "#2980b9" },
+  { name: "Vance Sacrifices", desc: "Steps in, sees David/Reyes/Kade. Becomes a guardian for future wanderers.", color: "#d4a017" },
+  { name: "The Tear", desc: "Secret, 100% completion. Reyes's formula widens breach without sacrifice. Everyone escapes, but Backrooms leaks into reality forever.", color: "#8e44ad" },
+  { name: "The Acclimation", desc: "Save Kade + choose to stay. Entire squad becomes citizens of the infinite city.", color: "#3a7d44" },
+];
+
 function LevelCard({ level, isOpen, onToggle }: { level: typeof levels[0]; isOpen: boolean; onToggle: () => void }) {
   return (
-    <div
-      className="border card-hover"
-      style={{ borderColor: `${level.color}25`, background: level.bg }}
-    >
-      <button onClick={onToggle} className="w-full p-5 text-left">
-        <div className="flex items-center gap-4">
-          <div
-            className="w-14 h-14 flex flex-col items-center justify-center shrink-0"
-            style={{ border: `1px solid ${level.color}40` }}
-          >
-            <span className="font-mono text-[8px] text-steel-light/40 tracking-wider">LEVEL</span>
-            <span className="font-mono text-lg font-bold" style={{ color: level.color }}>{level.id}</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-mono text-sm tracking-wider text-foreground">{level.name}</h3>
-              <span className="font-mono text-[9px] text-steel-light/40">— {level.subtitle}</span>
-            </div>
-            <div className="flex flex-wrap items-center gap-3 text-[10px]">
-              <span className="flex items-center gap-1 font-mono text-steel-light/50">
-                <Clock size={10} /> {level.duration}
-              </span>
-              <span className="flex items-center gap-1 font-mono text-steel-light/50">
-                <AlertTriangle size={10} /> {level.difficulty}
-              </span>
-              <span className="flex items-center gap-1 font-mono text-steel-light/50">
-                <Users size={10} /> {level.entityDensity}
-              </span>
-              <span className="flex items-center gap-1 font-mono text-steel-light/50">
-                <Crosshair size={10} /> {level.combatViability}
-              </span>
-            </div>
-          </div>
-          <span className="text-steel-light/30">
-            {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-          </span>
+    <div className="py-8">
+      <button onClick={onToggle} className="w-full text-left group">
+        <div className="flex items-baseline gap-4 mb-1">
+          <span className="font-mono text-[10px] text-foreground/15 tracking-[0.2em] shrink-0">LEVEL {level.id}</span>
+          <h3 className="text-lg font-light text-foreground/70 group-hover:text-foreground/90 transition-colors">
+            {level.name}
+          </h3>
+          <span className="text-[13px] text-foreground/20 font-light hidden sm:inline">— {level.subtitle}</span>
+          {isOpen ? (
+            <ChevronDown size={14} className="text-foreground/15 ml-auto" />
+          ) : (
+            <ChevronRight size={14} className="text-foreground/15 ml-auto" />
+          )}
+        </div>
+        <div className="flex items-baseline gap-4 mt-1">
+          <span className="font-mono text-[9px] text-foreground/10">{level.duration}</span>
+          <span className="font-mono text-[9px] text-foreground/10">{level.difficulty}</span>
         </div>
       </button>
 
       {isOpen && (
-        <div className="px-5 pb-5 space-y-5 border-t" style={{ borderColor: `${level.color}10` }}>
-          <div className="pt-4">
-            {/* Environment & Tone */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div className="bg-steel-dark/50 p-3">
-                <span className="data-label block mb-1">ENVIRONMENT</span>
-                <p className="text-xs text-foreground/70">{level.environment}</p>
-              </div>
-              <div className="bg-steel-dark/50 p-3">
-                <span className="data-label block mb-1">TONE</span>
-                <p className="text-xs text-foreground/70">{level.tone}</p>
-              </div>
-            </div>
+        <div className="mt-6 ml-0 md:ml-8 space-y-6">
+          <p className="text-[13px] text-foreground/40 font-light leading-relaxed max-w-2xl">
+            {level.description}
+          </p>
 
-            {/* Description */}
-            <p className="text-sm text-foreground/80 leading-relaxed mb-4">{level.description}</p>
-
-            {/* Tactical Status */}
-            <div className="bg-steel-dark/50 p-3 border border-amber/10 mb-4">
-              <span className="data-label block mb-1">TACTICAL SYSTEM STATUS</span>
-              <p className="text-xs text-amber-dim/80">{level.tacticalStatus}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-2">ENVIRONMENT</span>
+              <p className="text-[12px] text-foreground/30 font-light">{level.environment}</p>
             </div>
-
-            {/* Color Progression */}
-            <div className="mb-4">
-              <span className="data-label block mb-1">COLOR PROGRESSION</span>
-              <p className="text-xs text-foreground/60">{level.colorProgression}</p>
+            <div>
+              <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-2">TONE</span>
+              <p className="text-[12px] text-foreground/30 font-light">{level.tone}</p>
             </div>
+          </div>
 
-            {/* Key Encounters */}
-            <div className="mb-4">
-              <span className="data-label block mb-2">KEY ENCOUNTERS</span>
-              <div className="space-y-1.5">
-                {level.encounters.map((e, i) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <span className="font-mono text-[9px] mt-0.5" style={{ color: `${level.color}60` }}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="text-xs text-foreground/70">{e}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div>
+            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-2">TACTICAL STATUS</span>
+            <p className="text-[12px] text-amber/30 font-light">{level.tacticalStatus}</p>
+          </div>
 
-            {/* Scripted Moments */}
-            <div className="mb-4">
-              <span className="data-label block mb-2">SCRIPTED MOMENTS</span>
-              <div className="space-y-1.5">
-                {level.scripted.map((s, i) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <span className="text-amber-dim/30 mt-0.5">▸</span>
-                    <span className="text-xs text-foreground/60 italic">{s}</span>
-                  </div>
-                ))}
-              </div>
+          <div>
+            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-3">KEY ENCOUNTERS</span>
+            <div className="space-y-1.5">
+              {level.encounters.map((e, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <span className="font-mono text-[9px] text-foreground/10 mt-0.5 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="text-[12px] text-foreground/30 font-light">{e}</span>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Key Design */}
-            <div className="bg-steel-dark/30 p-3 border-l-2" style={{ borderColor: level.color }}>
-              <span className="data-label block mb-1">KEY DESIGN PHILOSOPHY</span>
-              <p className="text-xs text-foreground/70">{level.keyDesign}</p>
+          <div>
+            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-3">SCRIPTED MOMENTS</span>
+            <div className="space-y-1.5">
+              {level.scripted.map((s, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <span className="text-foreground/10 mt-0.5 shrink-0">—</span>
+                  <span className="text-[12px] text-foreground/25 font-light italic">{s}</span>
+                </div>
+              ))}
             </div>
+          </div>
+
+          <div className="pt-2">
+            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-2">DESIGN PHILOSOPHY</span>
+            <p className="text-[12px] text-foreground/30 font-light">{level.keyDesign}</p>
           </div>
         </div>
       )}
+
+      <div className="mt-8 h-px bg-foreground/[0.04]" />
     </div>
   );
 }
@@ -296,59 +243,51 @@ export default function LevelsPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <div className="px-6 md:px-16 lg:px-24 py-16 md:py-24">
+    <div className="px-6 md:px-12 lg:px-24 py-16 md:py-24">
       <SectionHeader
-        code="03"
-        title="LEVELS"
+        code="03 / LEVELS"
+        title="Levels"
         subtitle="Five levels. No maps. No GPS. No mercy."
       />
 
       {/* Design philosophy */}
-      <div className="bg-steel-dark/30 border border-amber/10 p-5 mb-8 corner-brackets">
-        <h3 className="font-mono text-xs text-amber-dim tracking-[0.2em] mb-3">DESIGN PHILOSOPHY</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs text-foreground/70">
-          <div>
-            <span className="data-label block mb-1">THREE-ZONE STRUCTURE</span>
-            <p>Every level has Safe-ish → Tension → Climax zones at macro, mid, and micro scales.</p>
-          </div>
-          <div>
-            <span className="data-label block mb-1">THE BACKROOMS ARE THE ENEMY</span>
-            <p>Level geometry itself is hostile before entities.</p>
-          </div>
-          <div>
-            <span className="data-label block mb-1">NO MAPS</span>
-            <p>No minimap (Level 2+), compass spins (Level 4+), GPS never works. Landmark-based navigation.</p>
-          </div>
-          <div>
-            <span className="data-label block mb-1">TONAL SHIFT IN ARCHITECTURE</span>
-            <p>Open/navigable → Claustrophobic → Personal/wrong → Overwhelming/infinite.</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Level progression visualization */}
-      <div className="mb-8">
-        <div className="flex items-center gap-1 h-8">
-          {levels.map((level, i) => (
-            <div key={i} className="flex-1 h-full relative group cursor-pointer" onClick={() => setOpenIndex(i)}>
-              <div
-                className="absolute inset-0 opacity-30 group-hover:opacity-60 transition-opacity"
-                style={{ background: level.color }}
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-mono text-[9px] text-white/80 tracking-wider">{level.id}</span>
-              </div>
+      <div className="mb-16">
+        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">DESIGN PHILOSOPHY</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { label: "THREE-ZONE STRUCTURE", desc: "Every level has Safe-ish → Tension → Climax zones at macro, mid, and micro scales." },
+            { label: "THE BACKROOMS ARE THE ENEMY", desc: "Level geometry itself is hostile before entities." },
+            { label: "NO MAPS", desc: "No minimap (Level 2+), compass spins (Level 4+), GPS never works. Landmark-based navigation." },
+            { label: "TONAL SHIFT IN ARCHITECTURE", desc: "Open/navigable → Claustrophobic → Personal/wrong → Overwhelming/infinite." },
+          ].map((p) => (
+            <div key={p.label}>
+              <span className="font-mono text-[9px] text-foreground/15 tracking-[0.15em] block mb-2">{p.label}</span>
+              <p className="text-[12px] text-foreground/25 font-light leading-relaxed">{p.desc}</p>
             </div>
           ))}
         </div>
-        <div className="flex justify-between mt-1">
-          <span className="font-mono text-[8px] text-steel-light/30">CONFIDENCE</span>
-          <span className="font-mono text-[8px] text-steel-light/30">AFTERMATH</span>
+      </div>
+
+      {/* Level progression */}
+      <div className="mb-12">
+        <div className="flex gap-[2px] h-1">
+          {levels.map((level, i) => (
+            <div
+              key={i}
+              className="flex-1 cursor-pointer transition-opacity hover:opacity-100 opacity-60"
+              style={{ background: level.color }}
+              onClick={() => setOpenIndex(i)}
+            />
+          ))}
+        </div>
+        <div className="flex justify-between mt-2">
+          <span className="font-mono text-[8px] text-foreground/10">CONFIDENCE</span>
+          <span className="font-mono text-[8px] text-foreground/10">AFTERMATH</span>
         </div>
       </div>
 
       {/* Level cards */}
-      <div className="space-y-3">
+      <div>
         {levels.map((level, i) => (
           <LevelCard
             key={level.id}
@@ -360,20 +299,14 @@ export default function LevelsPage() {
       </div>
 
       {/* Endings */}
-      <div className="mt-16">
-        <h3 className="font-mono text-xs text-amber-dim tracking-[0.2em] mb-6">THE FIVE ENDINGS</h3>
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-          {[
-            { name: "Thorne Sacrifices", desc: "Opens exit, dies screaming/laughing. Post-credits: his voice from inside.", color: "#c0392b" },
-            { name: "Holt Sacrifices", desc: "Restrains Vance, steps in. 'Tell my mother I wasn't running.'", color: "#2980b9" },
-            { name: "Vance Sacrifices", desc: "Steps in, sees David/Reyes/Kade. Becomes a guardian for future wanderers.", color: "#d4a017" },
-            { name: "The Tear", desc: "Secret, 100% completion. Reyes's formula widens breach without sacrifice. Everyone escapes, but Backrooms leaks into reality forever.", color: "#8e44ad" },
-            { name: "The Acclimation", desc: "Save Kade + choose to stay. Entire squad becomes citizens of the infinite city.", color: "#3a7d44" },
-          ].map((ending) => (
-            <div key={ending.name} className="bg-steel-dark/30 border p-4 card-hover" style={{ borderColor: `${ending.color}30` }}>
-              <div className="w-full h-1 mb-3" style={{ background: ending.color }} />
-              <h4 className="font-mono text-xs tracking-wider text-foreground mb-2">{ending.name}</h4>
-              <p className="text-[10px] text-steel-light/60 leading-relaxed">{ending.desc}</p>
+      <div className="mt-20">
+        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-8">THE FIVE ENDINGS</h3>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          {endings.map((ending) => (
+            <div key={ending.name}>
+              <div className="w-full h-[2px] mb-4" style={{ background: `${ending.color}40` }} />
+              <h4 className="text-[13px] font-medium text-foreground/50 mb-2">{ending.name}</h4>
+              <p className="text-[11px] text-foreground/20 font-light leading-relaxed">{ending.desc}</p>
             </div>
           ))}
         </div>
