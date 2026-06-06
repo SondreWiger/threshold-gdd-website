@@ -14,6 +14,7 @@ const navItems = [
   { href: "/lore", label: "LORE & ENTITIES", code: "05" },
   { href: "/technical", label: "TECHNICAL", code: "06" },
   { href: "/timeline", label: "TIMELINE", code: "07" },
+  { href: "/maps", label: "MAPS", code: "08" },
 ];
 
 export default function Navigation() {
