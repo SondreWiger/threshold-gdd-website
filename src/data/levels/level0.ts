@@ -1,248 +1,269 @@
-import { LevelMap } from "@/components/maps/MapViewer";
+import { LevelMap, MapMarker } from "@/components/maps/MapViewer";
 
-// Helper to generate walls from room rect
-function roomWalls(x: number, y: number, w: number, h: number, exclude?: string[]) {
-  const e = exclude || [];
-  const walls = [];
-  if (!e.includes("top")) walls.push({ x1: x, y1: y, x2: x + w, y2: y });
-  if (!e.includes("bottom")) walls.push({ x1: x, y1: y + h, x2: x + w, y2: y + h });
-  if (!e.includes("left")) walls.push({ x1: x, y1: y, x2: x, y2: y + h });
-  if (!e.includes("right")) walls.push({ x1: x + w, y1: y, x2: x + w, y2: y + h });
-  return walls;
-}
+// Level 0: The Lobby — Connected floor plan
+// Backrooms office: interconnected rooms, looping corridors, dead ends.
+// Everything shares walls. Nothing floats.
 
-function corridorWalls(x: number, y: number, w: number, h: number, openings: { side: string; pos: number; width: number }[]) {
-  const walls: { x1: number; y1: number; x2: number; y2: number; type?: string }[] = [];
+const W = 2800;
+const H = 2200;
 
-  // Top wall with openings
-  let topSegments = [{ start: x, end: x + w }];
-  for (const o of openings.filter(s => s.side === "top")) {
-    topSegments = topSegments.flatMap(seg => {
-      if (o.pos >= seg.start && o.pos + o.width <= seg.end) {
-        const parts = [];
-        if (o.pos > seg.start) parts.push({ start: seg.start, end: o.pos });
-        if (o.pos + o.width < seg.end) parts.push({ start: o.pos + o.width, end: seg.end });
-        return parts;
-      }
-      return [seg];
-    });
-  }
-  for (const seg of topSegments) {
-    walls.push({ x1: seg.start, y1: y, x2: seg.end, y2: y });
-  }
-
-  // Bottom wall with openings
-  let bottomSegments = [{ start: x, end: x + w }];
-  for (const o of openings.filter(s => s.side === "bottom")) {
-    bottomSegments = bottomSegments.flatMap(seg => {
-      if (o.pos >= seg.start && o.pos + o.width <= seg.end) {
-        const parts = [];
-        if (o.pos > seg.start) parts.push({ start: seg.start, end: o.pos });
-        if (o.pos + o.width < seg.end) parts.push({ start: o.pos + o.width, end: seg.end });
-        return parts;
-      }
-      return [seg];
-    });
-  }
-  for (const seg of bottomSegments) {
-    walls.push({ x1: seg.start, y1: y + h, x2: seg.end, y2: y + h });
-  }
-
-  // Left wall with openings
-  let leftSegments = [{ start: y, end: y + h }];
-  for (const o of openings.filter(s => s.side === "left")) {
-    leftSegments = leftSegments.flatMap(seg => {
-      if (o.pos >= seg.start && o.pos + o.width <= seg.end) {
-        const parts = [];
-        if (o.pos > seg.start) parts.push({ start: seg.start, end: o.pos });
-        if (o.pos + o.width < seg.end) parts.push({ start: o.pos + o.width, end: seg.end });
-        return parts;
-      }
-      return [seg];
-    });
-  }
-  for (const seg of leftSegments) {
-    walls.push({ x1: x, y1: seg.start, x2: x, y2: seg.end });
-  }
-
-  // Right wall with openings
-  let rightSegments = [{ start: y, end: y + h }];
-  for (const o of openings.filter(s => s.side === "right")) {
-    rightSegments = rightSegments.flatMap(seg => {
-      if (o.pos >= seg.start && o.pos + o.width <= seg.end) {
-        const parts = [];
-        if (o.pos > seg.start) parts.push({ start: seg.start, end: o.pos });
-        if (o.pos + o.width < seg.end) parts.push({ start: o.pos + o.width, end: seg.end });
-        return parts;
-      }
-      return [seg];
-    });
-  }
-  for (const seg of rightSegments) {
-    walls.push({ x1: x + w, y1: seg.start, x2: x + w, y2: seg.end });
-  }
-
-  return walls;
-}
-
-// Level 0: The Lobby
-// Yellow office labyrinth. Backrooms-style: repeating offices, long corridors,
-// an open atrium, dark corridors, and a dead-end extraction point.
-
-const W = 3200;
-const H = 2400;
-
-// Offices grid - left section (incoherent backrooms grid)
-const officeGridWalls: { x1: number; y1: number; x2: number; y2: number; type?: string }[] = [];
-const officeSize = 120;
-const officeGap = 16;
-const cols = 8;
-const rows = 6;
-
-for (let r = 0; r < rows; r++) {
-  for (let c = 0; c < cols; c++) {
-    const ox = 80 + c * (officeSize + officeGap);
-    const oy = 200 + r * (officeSize + officeGap);
-
-    // Skip some walls to create openings (backrooms-style inconsistent gaps)
-    const skipTop = (r === 0) || (c === 3 && r % 2 === 0) || (c === 6 && r === 2);
-    const skipBottom = (r === rows - 1) || (c === 1 && r % 2 === 1) || (c === 5 && r === 4);
-    const skipLeft = (c === 0) || (r === 2 && c % 2 === 0) || (r === 5 && c === 4);
-    const skipRight = (c === cols - 1) || (r === 1 && c % 3 === 1) || (r === 4 && c === 7);
-
-    const exclude = [
-      skipTop ? "top" : "",
-      skipBottom ? "bottom" : "",
-      skipLeft ? "left" : "",
-      skipRight ? "right" : "",
-    ].filter(Boolean);
-
-    officeGridWalls.push(...roomWalls(ox, oy, officeSize, officeSize, exclude));
-  }
-}
-
-// Main corridor - horizontal spine
-const mainCorridorWalls = corridorWalls(60, 1100, 1800, 100, [
-  { side: "top", pos: 200, width: 60 },
-  { side: "top", pos: 500, width: 60 },
-  { side: "top", pos: 800, width: 80 },
-  { side: "top", pos: 1200, width: 60 },
-  { side: "top", pos: 1600, width: 60 },
-  { side: "bottom", pos: 150, width: 60 },
-  { side: "bottom", pos: 400, width: 60 },
-  { side: "bottom", pos: 700, width: 80 },
-  { side: "bottom", pos: 1100, width: 60 },
-  { side: "bottom", pos: 1500, width: 60 },
-]);
-
-// Vertical corridor connecting offices to main corridor
-const vertCorridor1Walls = corridorWalls(400, 680, 60, 440, [
-  { side: "top", pos: 720, width: 50 },
-  { side: "bottom", pos: 720, width: 50 },
-  { side: "left", pos: 780, width: 60 },
-  { side: "right", pos: 850, width: 60 },
-]);
-
-const vertCorridor2Walls = corridorWalls(900, 700, 60, 420, [
-  { side: "top", pos: 740, width: 50 },
-  { side: "bottom", pos: 740, width: 50 },
-  { side: "left", pos: 820, width: 60 },
-  { side: "right", pos: 900, width: 60 },
-]);
-
-// Atrium - large open space
-const atriumWalls = corridorWalls(1300, 600, 400, 500, [
-  { side: "top", pos: 1440, width: 80 },
-  { side: "bottom", pos: 1400, width: 80 },
-  { side: "left", pos: 750, width: 80 },
-  { side: "right", pos: 800, width: 80 },
-  { side: "right", pos: 950, width: 60 },
-]);
-
-// Dark corridor - leading to extraction (narrower, winding)
-const darkCorridorWalls = [
-  // Horizontal section
-  ...corridorWalls(1800, 1100, 600, 70, [
-    { side: "top", pos: 1950, width: 50 },
-    { side: "bottom", pos: 2100, width: 50 },
-  ]),
-  // Turn down
-  ...corridorWalls(2350, 1100, 70, 400, [
-    { side: "top", pos: 2380, width: 50 },
-    { side: "bottom", pos: 2380, width: 50 },
-    { side: "left", pos: 1250, width: 50 },
-    { side: "right", pos: 1200, width: 60 },
-    { side: "right", pos: 1350, width: 50 },
-  ]),
-  // Turn left
-  ...corridorWalls(1900, 1450, 520, 60, [
-    { side: "top", pos: 2000, width: 50 },
-    { side: "bottom", pos: 2150, width: 50 },
-    { side: "left", pos: 1470, width: 50 },
-  ]),
+// === OUTER BOUNDARY ===
+const boundary = [
+  { x1: 0, y1: 0, x2: W, y2: 0, type: "thick" as const },
+  { x1: W, y1: 0, x2: W, y2: H, type: "thick" as const },
+  { x1: W, y1: H, x2: 0, y2: H, type: "thick" as const },
+  { x1: 0, y1: H, x2: 0, y2: 0, type: "thick" as const },
 ];
 
-// Extraction room - dead end
-const extractionRoomWalls = corridorWalls(1750, 1600, 250, 200, [
-  { side: "top", pos: 1850, width: 60 },
-  { side: "bottom", pos: 1850, width: 0 },
-]);
+// === ROOMS (filled rectangles, shared walls) ===
+// Each room is defined by its rect. Walls are generated from shared edges.
 
-// Scattered irregular rooms (backrooms randomness)
-const irregularRooms: { x1: number; y1: number; x2: number; y2: number; type?: string }[] = [
-  // Room that doesn't connect to anything
-  ...roomWalls(100, 1500, 180, 140),
-  // Room with only two walls
-  { x1: 1600, y1: 200, x2: 1800, y2: 200 },
-  { x1: 1600, y1: 200, x2: 1600, y2: 400 },
-  // Isolated corridor segment
-  ...roomWalls(2200, 400, 200, 60),
-  // L-shaped room
-  { x1: 2600, y1: 600, x2: 2900, y2: 600 },
-  { x1: 2600, y1: 600, x2: 2600, y2: 900 },
-  { x1: 2600, y1: 900, x2: 2800, y2: 900 },
-  { x1: 2800, y1: 750, x2: 2800, y2: 900 },
-  { x1: 2800, y1: 750, x2: 2900, y2: 750 },
-  { x1: 2900, y1: 600, x2: 2900, y2: 750 },
-  // Narrow passage
-  { x1: 2500, y1: 1000, x2: 2500, y2: 1200 },
-  { x1: 2560, y1: 1000, x2: 2560, y2: 1200 },
+interface RoomDef {
+  x: number; y: number; w: number; h: number;
+  label?: string; type?: string;
+}
+
+const rooms: RoomDef[] = [
+  // === ENTRY SUITE (top-left) ===
+  { x: 60, y: 60, w: 320, h: 200, label: "ENTRY", type: "key" },
+  { x: 60, y: 260, w: 200, h: 160, label: "OFFICE A", type: "office" },
+  { x: 260, y: 260, w: 180, h: 160, label: "OFFICE B", type: "office" },
+  { x: 60, y: 420, w: 180, h: 140, label: "OFFICE C", type: "office" },
+  { x: 240, y: 420, w: 140, h: 140, label: "", type: "office" },
+
+  // === NORTH CORRIDOR (horizontal spine) ===
+  { x: 380, y: 120, w: 800, h: 80, label: "CORRIDOR", type: "corridor" },
+  // Offices along north corridor
+  { x: 380, y: 200, w: 160, h: 120, label: "OFFICE D", type: "office" },
+  { x: 540, y: 200, w: 160, h: 120, label: "OFFICE E", type: "office" },
+  { x: 700, y: 200, w: 160, h: 120, label: "OFFICE F", type: "office" },
+  { x: 860, y: 200, w: 160, h: 120, label: "OFFICE G", type: "office" },
+  { x: 1020, y: 200, w: 160, h: 120, label: "OFFICE H", type: "office" },
+
+  // === ATRIUM (large open space) ===
+  { x: 1180, y: 60, w: 440, h: 320, label: "ATRIUM", type: "atrium" },
+
+  // === EAST WING (corridor + rooms) ===
+  { x: 1620, y: 60, w: 80, h: 500, label: "", type: "corridor" },
+  { x: 1700, y: 60, w: 280, h: 200, label: "OFFICE I", type: "office" },
+  { x: 1700, y: 260, w: 280, h: 200, label: "OFFICE J", type: "office" },
+  { x: 1980, y: 60, w: 80, h: 400, label: "", type: "corridor" },
+  { x: 1700, y: 460, w: 280, h: 160, label: "OFFICE K", type: "office" },
+
+  // === CENTRAL CORRIDOR (vertical spine) ===
+  { x: 1180, y: 380, w: 80, h: 700, label: "", type: "corridor" },
+  // Offices along central corridor
+  { x: 1000, y: 380, w: 180, h: 140, label: "OFFICE L", type: "office" },
+  { x: 1000, y: 520, w: 180, h: 140, label: "OFFICE M", type: "office" },
+  { x: 1260, y: 380, w: 180, h: 140, label: "OFFICE N", type: "office" },
+  { x: 1260, y: 520, w: 180, h: 140, label: "OFFICE O", type: "office" },
+
+  // === SOUTH-CENTRAL AREA ===
+  { x: 1000, y: 660, w: 440, h: 80, label: "CORRIDOR", type: "corridor" },
+  { x: 800, y: 740, w: 200, h: 180, label: "STORAGE", type: "industrial" },
+  { x: 1000, y: 740, w: 200, h: 180, label: "OFFICE P", type: "office" },
+  { x: 1200, y: 740, w: 240, h: 180, label: "OFFICE Q", type: "office" },
+
+  // === DARK CORRIDOR (leading to extraction) ===
+  { x: 1440, y: 740, w: 340, h: 60, label: "DARK CORRIDOR", type: "corridor" },
+  { x: 1440, y: 800, w: 60, h: 300, label: "", type: "corridor" },
+  { x: 1500, y: 800, w: 280, h: 60, label: "", type: "corridor" },
+
+  // === EXTRACTION ROOM (dead end) ===
+  { x: 1500, y: 860, w: 280, h: 200, label: "EXTRACTION", type: "extraction" },
+
+  // === WEST WING (maze section) ===
+  { x: 60, y: 560, w: 200, h: 200, label: "OFFICE R", type: "office" },
+  { x: 260, y: 560, w: 160, h: 120, label: "OFFICE S", type: "office" },
+  { x: 260, y: 680, w: 160, h: 120, label: "OFFICE T", type: "office" },
+  { x: 60, y: 760, w: 200, h: 160, label: "OFFICE U", type: "office" },
+  { x: 260, y: 800, w: 160, h: 120, label: "OFFICE V", type: "office" },
   // Dead end alcove
-  ...roomWalls(2700, 1300, 100, 150),
-  // Backrooms "wrong" room (walls at odd angles suggested by offset rects)
-  { x1: 300, y1: 1800, x2: 500, y2: 1800 },
-  { x1: 500, y1: 1800, x2: 500, y2: 2050 },
-  { x1: 300, y1: 2050, x2: 500, y2: 2050 },
-  { x1: 300, y1: 1800, x2: 300, y2: 2050 },
-  // Interior wall creating narrow passage
-  { x1: 350, y1: 1800, x2: 350, y2: 1950 },
-  { x1: 450, y1: 1900, x2: 450, y2: 2050 },
+  { x: 420, y: 560, w: 120, h: 120, label: "DEAD END", type: "empty" },
+  // Corridor connecting west wing to center
+  { x: 420, y: 680, w: 80, h: 300, label: "", type: "corridor" },
+  { x: 500, y: 880, w: 300, h: 60, label: "CORRIDOR", type: "corridor" },
+
+  // === LOWER CORRIDOR (horizontal) ===
+  { x: 60, y: 920, w: 740, h: 60, label: "LOWER CORRIDOR", type: "corridor" },
+  // Rooms below lower corridor
+  { x: 60, y: 980, w: 200, h: 140, label: "OFFICE W", type: "office" },
+  { x: 260, y: 980, w: 160, h: 140, label: "OFFICE X", type: "office" },
+  { x: 420, y: 980, w: 200, h: 140, label: "OFFICE Y", type: "office" },
+  { x: 620, y: 980, w: 180, h: 140, label: "OFFICE Z", type: "office" },
+
+  // === BOTTOM SECTION (maze of narrow corridors) ===
+  { x: 60, y: 1120, w: 60, h: 400, label: "", type: "corridor" },
+  { x: 120, y: 1120, w: 200, h: 80, label: "", type: "corridor" },
+  { x: 120, y: 1200, w: 80, h: 200, label: "", type: "corridor" },
+  { x: 200, y: 1200, w: 160, h: 80, label: "", type: "corridor" },
+  { x: 280, y: 1280, w: 80, h: 200, label: "", type: "corridor" },
+  { x: 360, y: 1360, w: 200, h: 80, label: "", type: "corridor" },
+  // Dead end rooms in maze
+  { x: 120, y: 1400, w: 160, h: 120, label: "ALCOVE", type: "empty" },
+  { x: 280, y: 1480, w: 160, h: 100, label: "", type: "empty" },
+
+  // === BOTTOM CORRIDOR ===
+  { x: 360, y: 1440, w: 800, h: 60, label: "", type: "corridor" },
+  // Rooms along bottom corridor
+  { x: 560, y: 1120, w: 180, h: 160, label: "OFFICE \u03B1", type: "office" },
+  { x: 740, y: 1120, w: 180, h: 160, label: "OFFICE \u03B2", type: "office" },
+  { x: 560, y: 1280, w: 180, h: 80, label: "", type: "corridor" },
+  { x: 740, y: 1280, w: 180, h: 80, label: "", type: "corridor" },
+  { x: 560, y: 1360, w: 180, h: 80, label: "", type: "corridor" },
+  { x: 740, y: 1360, w: 180, h: 80, label: "", type: "corridor" },
+  // South offices
+  { x: 920, y: 1120, w: 200, h: 160, label: "OFFICE \u03B3", type: "office" },
+  { x: 920, y: 1280, w: 200, h: 160, label: "OFFICE \u03B4", type: "office" },
+  { x: 1120, y: 1120, w: 200, h: 160, label: "OFFICE \u03B5", type: "office" },
+  { x: 1120, y: 1280, w: 200, h: 160, label: "OFFICE \u03B6", type: "office" },
+
+  // === BOTTOM-RIGHT SECTION ===
+  { x: 1320, y: 1120, w: 60, h: 380, label: "", type: "corridor" },
+  { x: 1380, y: 1120, w: 300, h: 160, label: "OFFICE \u03B7", type: "office" },
+  { x: 1380, y: 1280, w: 300, h: 160, label: "OFFICE \u03B8", type: "office" },
+  { x: 1680, y: 1120, w: 60, h: 320, label: "", type: "corridor" },
+  { x: 1380, y: 1440, w: 360, h: 60, label: "CORRIDOR", type: "corridor" },
+
+  // === FAR EAST LOWER ===
+  { x: 1740, y: 620, w: 300, h: 200, label: "OFFICE \u03B9", type: "office" },
+  { x: 1740, y: 820, w: 60, h: 300, label: "", type: "corridor" },
+  { x: 1800, y: 820, w: 240, h: 60, label: "", type: "corridor" },
+  { x: 1800, y: 880, w: 240, h: 200, label: "OFFICE \u03BA", type: "office" },
+  { x: 2040, y: 620, w: 60, h: 460, label: "", type: "corridor" },
+  { x: 1740, y: 1120, w: 360, h: 160, label: "OFFICE \u03BB", type: "office" },
+  { x: 1740, y: 1280, w: 360, h: 160, label: "OFFICE \u03BC", type: "office" },
 ];
 
-// Outer boundary
-const boundaryWalls = [
-  { x1: 0, y1: 0, x2: W, y2: 0 },
-  { x1: W, y1: 0, x2: W, y2: H },
-  { x1: W, y1: H, x2: 0, y2: H },
-  { x1: 0, y1: H, x2: 0, y2: 0 },
-];
+// === Generate walls from rooms ===
+// For each room, draw its 4 edges. Skip edges that are shared with adjacent rooms.
 
-// Extra walls for texture - ceiling tiles, carpet seams, fluorescent light fixtures
-const detailWalls: { x1: number; y1: number; x2: number; y2: number; type: string }[] = [];
-// Fluorescent light fixtures (parallel lines in corridors)
-for (let x = 100; x < 1800; x += 200) {
-  detailWalls.push({ x1: x, y1: 1120, x2: x + 120, y2: 1120, type: "outline" });
-  detailWalls.push({ x1: x, y1: 1180, x2: x + 120, y2: 1180, type: "outline" });
-}
+function generateWalls(rooms: RoomDef[]) {
+  const walls: { x1: number; y1: number; x2: number; y2: number; type: "wall" }[] = [];
+  const edgeKey = (x1: number, y1: number, x2: number, y2: number) => {
+    const min = Math.min(x1, x2) + "," + Math.min(y1, y2);
+    const max = Math.max(x1, x2) + "," + Math.max(y1, y2);
+    return min + "|" + max;
+  };
+  const edgeCount = new Map<string, number>();
 
-// Carpet seams in offices
-for (let r = 0; r < rows; r++) {
-  for (let c = 0; c < cols; c++) {
-    const ox = 80 + c * (officeSize + officeGap);
-    const oy = 200 + r * (officeSize + officeGap);
-    detailWalls.push({ x1: ox + 30, y1: oy + officeSize / 2, x2: ox + officeSize - 30, y2: oy + officeSize / 2, type: "outline" });
+  // Count edges
+  for (const room of rooms) {
+    const edges = [
+      edgeKey(room.x, room.y, room.x + room.w, room.y),
+      edgeKey(room.x, room.y + room.h, room.x + room.w, room.y + room.h),
+      edgeKey(room.x, room.y, room.x, room.y + room.h),
+      edgeKey(room.x + room.w, room.y, room.x + room.w, room.y + room.h),
+    ];
+    for (const e of edges) {
+      edgeCount.set(e, (edgeCount.get(e) || 0) + 1);
+    }
   }
+
+  // Draw edges that appear exactly once (boundary) or mark shared edges
+  for (const room of rooms) {
+    const edges = [
+      { x1: room.x, y1: room.y, x2: room.x + room.w, y2: room.y },
+      { x1: room.x, y1: room.y + room.h, x2: room.x + room.w, y2: room.y + room.h },
+      { x1: room.x, y1: room.y, x2: room.x, y2: room.y + room.h },
+      { x1: room.x + room.w, y1: room.y, x2: room.x + room.w, y2: room.y + room.h },
+    ];
+    for (const e of edges) {
+      const k = edgeKey(e.x1, e.y1, e.x2, e.y2);
+      if (edgeCount.get(k) === 1) {
+        // Boundary wall
+        walls.push({ ...e, type: "wall" });
+      }
+      // Skip shared walls (count > 1) — rooms share them
+    }
+  }
+
+  return walls;
 }
+
+const generatedWalls = generateWalls(rooms);
+
+// === DETAIL WALLS (interior partitions, furniture, fixtures) ===
+const detailWalls: { x1: number; y1: number; x2: number; y2: number; type: "thin" | "thick" }[] = [
+  // Fluorescent light fixtures in corridors
+  ...[420, 520, 620, 720, 820, 920, 1020, 1120].flatMap(x => [
+    { x1: x, y1: 148, x2: x + 60, y2: 148, type: "thin" as const },
+    { x1: x, y1: 172, x2: x + 60, y2: 172, type: "thin" as const },
+  ]),
+  // Atrium columns
+  { x1: 1280, y1: 140, x2: 1280, y2: 160, type: "thick" },
+  { x1: 1380, y1: 140, x2: 1380, y2: 160, type: "thick" },
+  { x1: 1280, y1: 260, x2: 1280, y2: 280, type: "thick" },
+  { x1: 1380, y1: 260, x2: 1380, y2: 280, type: "thick" },
+  // Extraction room interior detail
+  { x1: 1560, y1: 920, x2: 1560, y2: 1000, type: "thin" },
+  { x1: 1700, y1: 920, x2: 1700, y2: 1000, type: "thin" },
+];
+
+// === ZONES ===
+const zones = [
+  { x: 20, y: 20, w: 460, h: 600, color: "#d4a017", label: "ENTRY SUITE" },
+  { x: 360, y: 40, w: 860, h: 300, color: "#d4a017", label: "NORTH CORRIDOR" },
+  { x: 1160, y: 20, w: 480, h: 380, color: "#f5a623", label: "ATRIUM" },
+  { x: 1600, y: 20, w: 460, h: 560, color: "#d4a017", label: "EAST WING" },
+  { x: 20, y: 540, w: 460, h: 400, color: "#d4a017", label: "WEST WING" },
+  { x: 1420, y: 720, w: 340, h: 380, color: "#2c3e50", label: "DARK ZONE" },
+  { x: 1480, y: 840, w: 320, h: 240, color: "#c0392b", label: "EXTRACTION" },
+  { x: 40, y: 1080, w: 400, h: 460, color: "#d4a017", label: "LOWER MAZE" },
+  { x: 540, y: 1080, w: 800, h: 400, color: "#d4a017", label: "SOUTH OFFICES" },
+];
+
+// === MARKERS ===
+const markers: MapMarker[] = [
+  {
+    x: 220, y: 160, type: "start", label: "Insertion Point",
+    description: "Fireteam THRESHOLD materializes in a yellow-wallpapered office. The wall they came through is gone. Radio contact with Async confirms: explore, document, extract at designated point.",
+  },
+  {
+    x: 600, y: 260, type: "encounter", label: "First Lurker Sighting",
+    description: "A humanoid silhouette appears in peripheral vision at the far end of a corridor. When you look directly, nothing is there. It never approaches. It never retreats.",
+  },
+  {
+    x: 1400, y: 220, type: "encounter", label: "Hound Encounter — Atrium",
+    description: "The Atrium opens up — first large space. A quadrupedal Hound with yellowed-wallpaper skin bursts from behind a pillar. Combat tutorial: photophobic, explosive bursts.",
+  },
+  {
+    x: 1280, y: 700, type: "danger", label: "Dark Corridor — Smiler",
+    description: "Lights fail. The corridor is pitch black. A wide grin appears in the darkness — impossibly wide, impossibly white. The Smiler. Photophobic. Extremely fast in darkness.",
+  },
+  {
+    x: 1660, y: 960, type: "end", label: "Extraction Point — FAILURE",
+    description: "The extraction beacon. A dead Async specialist lies on the ground. The beacon is dead. Radio contact dissolves into static. Extraction was never coming.",
+  },
+  {
+    x: 480, y: 260, type: "item", label: "Async Field Manual",
+    description: "A waterproof manual wedged behind a fluorescent light. Contains basic entity identification and survival protocols. Async branding on every page.",
+  },
+  {
+    x: 200, y: 840, type: "item", label: "Survivor Journal (Page 1)",
+    description: "A water-damaged journal: 'Day 3. The yellow is everywhere. I can hear breathing in the walls. The lights buzz louder when I'm afraid.'",
+  },
+  {
+    x: 1800, y: 160, type: "item", label: "Reyes's Photo 1",
+    description: "A photograph showing the squad walking through a corridor. There's a sixth figure behind them. None of them remember anyone else being there.",
+  },
+  {
+    x: 800, y: 160, type: "scripted", label: "Kade's Counting",
+    description: "Kade counts flights: 'I counted four flights down. But the door says Level One.' The first explicit acknowledgment that spatial logic doesn't apply.",
+  },
+  {
+    x: 1180, y: 160, type: "landmark", label: "Fluorescent Grid",
+    description: "A long corridor with perfectly aligned fluorescent lights stretching into distance. The hum is loudest here. Carpet is damp. The walls sweat.",
+  },
+  {
+    x: 900, y: 800, type: "scripted", label: "Radio Death",
+    description: "The radio crackles with a recording, on loop: '...do not attempt extraction. Repeat, do not attempt...'",
+  },
+  {
+    x: 200, y: 1300, type: "danger", label: "Dead End Alcove",
+    description: "A corridor that ends abruptly. The temperature drops. The fluorescent light flickers in a pattern that almost looks like Morse code.",
+  },
+];
 
 export const level0: LevelMap = {
   id: "0",
@@ -250,167 +271,10 @@ export const level0: LevelMap = {
   subtitle: "The Breach",
   width: W,
   height: H,
-  bgColor: "#0c0b08",
-  wallColor: "rgba(180,140,40,0.35)",
-  gridColor: "rgba(180,140,40,0.04)",
-  walls: [
-    ...boundaryWalls,
-    ...officeGridWalls,
-    ...mainCorridorWalls,
-    ...vertCorridor1Walls,
-    ...vertCorridor2Walls,
-    ...atriumWalls,
-    ...darkCorridorWalls,
-    ...extractionRoomWalls,
-    ...irregularRooms,
-    ...detailWalls,
-  ],
-  rooms: [
-    // Office grid rooms
-    ...Array.from({ length: rows }, (_, r) =>
-      Array.from({ length: cols }, (_, c) => ({
-        x: 80 + c * (officeSize + officeGap),
-        y: 200 + r * (officeSize + officeGap),
-        w: officeSize,
-        h: officeSize,
-        type: "office" as const,
-        label: (r === 0 && c === 0) ? "START" : undefined,
-      }))
-    ).flat(),
-    // Main corridor
-    { x: 60, y: 1100, w: 1800, h: 100, type: "corridor" as const, label: "MAIN CORRIDOR" },
-    // Vertical corridors
-    { x: 400, y: 680, w: 60, h: 440, type: "corridor" as const },
-    { x: 900, y: 700, w: 60, h: 420, type: "corridor" as const },
-    // Atrium
-    { x: 1300, y: 600, w: 400, h: 500, type: "atrium" as const, label: "ATRIUM" },
-    // Dark corridor
-    { x: 1800, y: 1100, w: 600, h: 70, type: "corridor" as const, label: "DARK CORRIDOR" },
-    { x: 2350, y: 1100, w: 70, h: 400, type: "corridor" as const },
-    { x: 1900, y: 1450, w: 520, h: 60, type: "corridor" as const },
-    // Extraction room
-    { x: 1750, y: 1600, w: 250, h: 200, type: "extraction" as const, label: "EXTRACTION" },
-    // Irregular rooms
-    { x: 100, y: 1500, w: 180, h: 140, type: "empty" as const },
-    { x: 1600, y: 200, w: 200, h: 200, type: "empty" as const },
-    { x: 2200, y: 400, w: 200, h: 60, type: "empty" as const },
-    { x: 2600, y: 600, w: 300, h: 300, type: "office" as const, label: "L-ROOM" },
-    { x: 2500, y: 1000, w: 60, h: 200, type: "corridor" as const },
-    { x: 2700, y: 1300, w: 100, h: 150, type: "empty" as const },
-    { x: 300, y: 1800, w: 200, h: 250, type: "office" as const, label: "WRONG" },
-  ],
-  zones: [
-    {
-      path: "M 60 180 L 1100 180 L 1100 700 L 60 700 Z",
-      color: "#d4a017",
-      label: "OFFICE GRID",
-      opacity: 0.05,
-    },
-    {
-      path: "M 60 1060 L 1900 1060 L 1900 1240 L 60 1240 Z",
-      color: "#d4a017",
-      label: "MAIN CORRIDOR",
-      opacity: 0.06,
-    },
-    {
-      path: "M 1260 560 L 1740 560 L 1740 1140 L 1260 1140 Z",
-      color: "#f39c12",
-      label: "ATRIUM ZONE",
-      opacity: 0.08,
-    },
-    {
-      path: "M 1760 1060 L 2460 1060 L 2460 1560 L 1760 1560 Z",
-      color: "#2c3e50",
-      label: "DARK ZONE",
-      opacity: 0.12,
-    },
-    {
-      path: "M 1710 1560 L 2040 1560 L 2040 1840 L 1710 1840 Z",
-      color: "#c0392b",
-      label: "EXTRACTION",
-      opacity: 0.1,
-    },
-  ],
-  markers: [
-    {
-      x: 140, y: 260,
-      type: "start",
-      label: "Insertion Point",
-      description: "Fireteam THRESHOLD materializes in a yellow-wallpapered office. The wall they came through is gone. Radio contact with Async confirms: explore, document, extract at designated point.",
-    },
-    {
-      x: 620, y: 340,
-      type: "encounter",
-      label: "First Lurker Sighting",
-      description: "A humanoid silhouette appears in peripheral vision at the far end of a corridor. When you look directly, nothing is there. It never approaches. It never retreats.",
-    },
-    {
-      x: 1450, y: 800,
-      type: "encounter",
-      label: "Hound Encounter — Atrium",
-      description: "The Atrium opens up — first large space. A quadrupedal Hound with yellowed-wallpaper skin bursts from behind a pillar. Combat tutorial: photophobic, explosive bursts. First real fight.",
-    },
-    {
-      x: 1500, y: 950,
-      type: "danger",
-      label: "Hound Pack",
-      description: "Multiple Hounds. The pack hunts in coordinated bursts. Light discipline becomes critical. The squad's confidence is still high — this feels manageable.",
-    },
-    {
-      x: 2100, y: 1130,
-      type: "encounter",
-      label: "Dark Corridor — Smiler Introduction",
-      description: "Lights fail. The corridor is pitch black. A wide grin appears in the darkness — impossibly wide, impossibly white. The Smiler. Photophobic. Extremely fast in darkness. First encounter with something that feels intelligent.",
-    },
-    {
-      x: 1870, y: 1700,
-      type: "end",
-      label: "Extraction Point — FAILURE",
-      description: "The extraction beacon. A dead Async specialist lies on the ground, data pad still clutched in hand. The beacon is dead. Radio contact dissolves into static. The squad realizes: extraction was never coming.",
-    },
-    {
-      x: 850, y: 260,
-      type: "item",
-      label: "Async Field Manual",
-      description: "Collectible: A waterproof manual found wedged behind a fluorescent light fixture. Contains basic entity identification and survival protocols. Async branding on every page.",
-    },
-    {
-      x: 350, y: 1580,
-      type: "item",
-      label: "Survivor Journal (Page 1)",
-      description: "Collectible: A water-damaged journal from a previous wanderer. Entry reads: 'Day 3. The yellow is everywhere. I can hear breathing in the walls. The lights buzz louder when I'm afraid.'",
-    },
-    {
-      x: 2750, y: 680,
-      type: "item",
-      label: "Reyes's Photo 1",
-      description: "Collectible: A photograph from Reyes's camera. Shows the squad walking through a corridor. There's a sixth figure behind them. None of them remember anyone else being there.",
-    },
-    {
-      x: 500, y: 1130,
-      type: "scripted",
-      label: "Kade's Counting",
-      description: "Scripted: Kade counts flights of stairs. 'I counted four flights down. But the door says Level One.' The first explicit acknowledgment that spatial logic doesn't apply here.",
-    },
-    {
-      x: 1200, y: 1130,
-      type: "landmark",
-      label: "Fluorescent Grid",
-      description: "A long corridor section with perfectly aligned fluorescent lights stretching into distance. The hum is loudest here. Carpet is damp. The walls sweat.",
-    },
-    {
-      x: 2380, y: 1300,
-      type: "danger",
-      label: "Dead End Alcove",
-      description: "A corridor that ends abruptly in a blank wall. The temperature drops. The fluorescent light above flickers in a pattern that almost looks like Morse code.",
-    },
-    {
-      x: 1050, y: 1130,
-      type: "scripted",
-      label: "Radio Death",
-      description: "Scripted: The radio crackles with a transmission from the dead specialist's beacon. It's a recording, on loop: '...do not attempt extraction. Repeat, do not attempt...'",
-    },
-  ],
+  walls: [...generatedWalls, ...detailWalls],
+  rooms: rooms.map(r => ({ ...r, fill: undefined })),
+  zones,
+  markers,
   meta: {
     environment: "Mono-yellow wallpaper, moist carpet, fluorescent lighting",
     duration: "60-90 min",
