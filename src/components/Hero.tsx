@@ -4,12 +4,35 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 const stats = [
-  { label: "LEVELS", value: "5" },
-  { label: "CHARACTERS", value: "5" },
-  { label: "ENTITIES", value: "200+" },
-  { label: "DIALOGUE", value: "2.4K" },
-  { label: "EXTRACTION", value: "3.7%" },
-  { label: "RUNTIME", value: "72H" },
+  { label: "LEVELS", value: "5", sub: "Distinct environments" },
+  { label: "CHARACTERS", value: "5", sub: "Fireteam THRESHOLD" },
+  { label: "ENTITIES", value: "200+", sub: "Documented types" },
+  { label: "DIALOGUE", value: "2.4K", sub: "Scripted lines" },
+  { label: "EXTRACTION", value: "3.7%", sub: "Historical average" },
+  { label: "RUNTIME", value: "72H", sub: "In-game timeline" },
+];
+
+const features = [
+  {
+    title: "Tonal Shift",
+    desc: "The only tactical shooter that becomes survival-horror while you play it.",
+    href: "/gameplay",
+  },
+  {
+    title: "Adaptive Squad AI",
+    desc: "Teammates develop stress responses and can psychologically break.",
+    href: "/characters",
+  },
+  {
+    title: "Reality-Bending",
+    desc: "Corridors stretch, rooms rearrange, distance becomes meaningless.",
+    href: "/levels",
+  },
+  {
+    title: "Co-op Horror",
+    desc: "Communication degrades as equipment fails, creating real isolation.",
+    href: "/gameplay",
+  },
 ];
 
 export default function Hero() {
@@ -31,20 +54,16 @@ export default function Hero() {
 
   return (
     <div className="min-h-[calc(100vh-48px)] flex flex-col justify-center px-6 md:px-12 lg:px-24">
-      {/* Section tag */}
       <span className="font-mono text-[10px] text-foreground/15 tracking-[0.3em] block mb-12">
         00 / HOME
       </span>
 
-      {/* Title */}
       <div className="mb-8">
         <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-light tracking-tighter text-foreground/90 leading-[0.85]">
-          THRESH
-          <span className="text-amber/70">OLD</span>
+          THRESH<span className="text-amber/70">OLD</span>
         </h1>
       </div>
 
-      {/* Tagline */}
       <div className="mb-16 max-w-xl">
         <p className="text-base md:text-lg text-foreground/25 font-light leading-relaxed">
           &quot;{typedText}
@@ -52,39 +71,53 @@ export default function Hero() {
         </p>
       </div>
 
-      {/* Stats — clean horizontal */}
-      <div className="flex flex-wrap gap-x-10 gap-y-4 mb-16">
+      {/* Stats with visual bars */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
         {stats.map((stat) => (
           <div key={stat.label}>
             <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-1">
               {stat.label}
             </span>
-            <span className="text-xl font-light text-foreground/60 tabular-nums">
+            <span className="text-2xl font-light text-foreground/70 tabular-nums block">
               {stat.value}
             </span>
+            <span className="font-mono text-[9px] text-foreground/10">{stat.sub}</span>
+            <div className="mt-2 h-[2px] bg-foreground/[0.04] overflow-hidden">
+              <div
+                className="h-full bg-amber/30"
+                style={{ width: `${Math.min(parseInt(stat.value) || 50, 100)}%` }}
+              />
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Feature lines */}
-      <div className="mb-16 max-w-2xl space-y-3">
-        {[
-          "Tonal shift — the only tactical shooter that becomes survival-horror while you play it.",
-          "Adaptive squad AI — teammates develop stress responses and can psychologically break.",
-          "Reality-bending environments — corridors stretch, rooms rearrange, distance becomes meaningless.",
-          "Co-op horror — communication degrades as equipment fails, creating real isolation.",
-        ].map((f, i) => (
-          <p key={i} className="text-[13px] text-foreground/20 font-light leading-relaxed">
-            {f}
-          </p>
+      {/* Feature cards with links */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        {features.map((f, i) => (
+          <Link
+            key={i}
+            href={f.href}
+            className="group py-4 border-t border-foreground/[0.06] hover:border-amber/20 transition-colors duration-300"
+          >
+            <h3 className="text-[13px] font-medium text-foreground/60 group-hover:text-amber/70 transition-colors mb-1">
+              {f.title}
+            </h3>
+            <p className="text-[12px] text-foreground/20 font-light leading-relaxed">
+              {f.desc}
+            </p>
+            <span className="font-mono text-[9px] text-foreground/10 group-hover:text-amber/30 transition-colors mt-2 inline-block">
+              EXPLORE &rarr;
+            </span>
+          </Link>
         ))}
       </div>
 
       {/* CTA */}
-      <div className="flex flex-wrap gap-6">
+      <div className="flex flex-wrap gap-6 mb-8">
         <Link
           href="/overview"
-          className="font-mono text-[11px] tracking-[0.15em] text-foreground/40 hover:text-foreground/70 transition-colors duration-300"
+          className="font-mono text-[11px] tracking-[0.15em] text-foreground/40 hover:text-amber/60 transition-colors duration-300"
         >
           ENTER BRIEFING &rarr;
         </Link>
@@ -92,11 +125,16 @@ export default function Hero() {
           href="/characters"
           className="font-mono text-[11px] tracking-[0.15em] text-foreground/20 hover:text-foreground/40 transition-colors duration-300"
         >
-          MEET THE SQUAD
+          MEET THE SQUAD &rarr;
+        </Link>
+        <Link
+          href="/journey"
+          className="font-mono text-[11px] tracking-[0.15em] text-foreground/20 hover:text-foreground/40 transition-colors duration-300"
+        >
+          DEV JOURNEY &rarr;
         </Link>
       </div>
 
-      {/* Bottom meta */}
       <div className="mt-auto pt-24 pb-8 font-mono text-[9px] text-foreground/10 tracking-[0.15em] flex gap-6">
         <span>NORTHEM DEVELOPMENTS</span>
         <span>UE5</span>

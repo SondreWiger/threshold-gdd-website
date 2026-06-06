@@ -1,47 +1,48 @@
 "use client";
 
+import Link from "next/link";
 import SectionHeader from "@/components/SectionHeader";
+import DataCard from "@/components/DataCard";
 
-const platforms = [
-  { platform: "PC (High)", res: "1440p–4K", fps: "60fps", quality: "Epic" },
-  { platform: "PC (Recommended)", res: "1080p–1440p", fps: "60fps", quality: "High" },
-  { platform: "PC (Minimum)", res: "1080p", fps: "30fps", quality: "Medium" },
-  { platform: "PS5", res: "Dynamic 4K", fps: "60/30fps", quality: "High–Epic" },
-  { platform: "Xbox Series X", res: "Dynamic 4K", fps: "60/30fps", quality: "High–Epic" },
-  { platform: "Xbox Series S", res: "1080p–1440p", fps: "60fps", quality: "Medium" },
+const features = [
+  {
+    title: "Procedural Geometry Engine",
+    desc: "Real-time corridor rearrangement, room duplication, and spatial impossibility using UE5 Nanite and procedural generation.",
+    tech: ["Nanite", "Procedural Gen", "Custom Blueprints"],
+    relatedLevels: "/levels",
+  },
+  {
+    title: "Adaptive AI Director",
+    desc: "Monitors player stress levels, squad dynamics, and progression to dynamically adjust entity spawns, pacing, and environmental events.",
+    tech: ["Behavior Trees", "ML Integration", "UE5 AI"],
+    relatedCharacters: "/characters",
+  },
+  {
+    title: "Stress Response System",
+    desc: "Physiological simulation of fear responses — heart rate, pupil dilation, tremors, and vocal changes based on proximity and exposure.",
+    tech: ["Animation Blueprints", "Audio Synthesis", "Post-Processing"],
+    relatedGameplay: "/gameplay",
+  },
+  {
+    title: "Realistic Ballistics",
+    desc: "Full bullet physics, ricochet simulation, and environmental destruction. Ammunition is scarce and every shot matters.",
+    tech: ["Chaos Physics", "Destruction", "Ray Tracing"],
+    relatedGameplay: "/gameplay",
+  },
+  {
+    title: "Adaptive Sound Design",
+    desc: "Procedural audio that responds to player state. Heartbeats increase under stress, ambient sounds distort near entities.",
+    tech: ["MetaSounds", "FMOD Integration", "Spatial Audio"],
+    relatedLevels: "/levels",
+  },
 ];
 
-const ue5Features = [
-  { name: "Nanite", desc: "High-detail environmental geometry without performance cost" },
-  { name: "Lumen", desc: "Dynamic global illumination — complete darkness when lights fail" },
-  { name: "Virtual Shadow Maps", desc: "Sharp, non-flickering shadows" },
-  { name: "MetaSounds", desc: "Procedural audio for The Hum and environmental ambience" },
-  { name: "World Partition", desc: "Large world streaming for Level 11's infinite city" },
-  { name: "Chaos Physics", desc: "Destructible cover, ragdolls, environmental interactions" },
-];
-
-const customSystems = [
-  { name: "Spatial Distortion Manager", type: "C++", desc: "Procedural room rearrangement without player detection" },
-  { name: "Sanity Manager", type: "C++", desc: "Per-character sanity tracking with visual/audio corruption" },
-  { name: "Entity Director", type: "C++", desc: "AI-driven entity spawning and behavior orchestration" },
-  { name: "Dialogue Manager", type: "C++", desc: "Context-aware dialogue with 800+ conditional variants" },
-  { name: "Inventory System", type: "C++", desc: "Magazine-based, weight-aware, injury-integrated" },
-  { name: "Save System", type: "C++", desc: "Persistent world state including psychological degradation" },
-  { name: "Co-op Netcode", type: "C++", desc: "Dedicated server architecture for 2-4 player co-op" },
-];
-
-const soundDesign = [
-  { layer: "TACTICAL", timing: "Early Game", desc: "Radio chatter, weapon mechanics, footsteps with reverb, equipment beeps" },
-  { layer: "ENVIRONMENTAL", timing: "Mid Game", desc: "Fluorescent buzz shifting pitch, distant sounds with no source, the Hum" },
-  { layer: "PSYCHOLOGICAL", timing: "Late Game", desc: "Heartbeat synced to controller, whispered dialogue, audio in one ear only" },
-];
-
-const humFrequencies = [
-  { level: "Level 0", hz: "60Hz", note: "Fluorescent buzz" },
-  { level: "Level 1", hz: "50Hz", note: "Industrial hum" },
-  { level: "Level 2", hz: "40Hz", note: "Felt in chest" },
-  { level: "Level 4", hz: "Variable", note: "With whispers" },
-  { level: "Level 11", hz: "Infrasonic", note: "Physically felt as pressure" },
+const challenges = [
+  { challenge: "Procedural geometry performance on mid-range hardware", risk: "HIGH", approach: "Aggressive LOD, Nanite optimization, platform-specific profiles" },
+  { challenge: "Co-op latency in horror-critical moments", risk: "HIGH", approach: "Client-side prediction, server reconciliation, lag compensation" },
+  { challenge: "AI director balance between challenge and frustration", risk: "MEDIUM", approach: "Playtesting across 100+ sessions, adaptive difficulty curves" },
+  { challenge: "Cross-platform parity (PC/PS5/Xbox)", risk: "MEDIUM", approach: "Early platform testing, scalable quality presets" },
+  { challenge: "Performance while maintaining atmosphere", risk: "HIGH", approach: "Dynamic resolution, frame generation, optimized lighting" },
 ];
 
 export default function TechnicalPage() {
@@ -49,144 +50,103 @@ export default function TechnicalPage() {
     <div className="px-6 md:px-12 lg:px-24 py-16 md:py-24">
       <SectionHeader
         code="06 / TECHNICAL"
-        title="Technical & Audio-Visual"
-        subtitle="Unreal Engine 5.4+. Dedicated servers. Adaptive horror."
+        title="Technical Specifications"
+        subtitle="Unreal Engine 5.4+. Nanite, Lumen, Chaos Physics, MetaSounds."
       />
 
-      {/* Engine */}
-      <div className="mb-16">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">ENGINE & CONFIGURATION</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {[
-            { label: "ENGINE", value: "UE 5.4+" },
-            { label: "RENDERER", value: "Deferred" },
-            { label: "NETCODE", value: "Dedicated" },
-            { label: "AUDIO", value: "Wwise" },
-            { label: "SCM", value: "Perforce" },
-            { label: "PHYSICS", value: "Chaos" },
-          ].map((s) => (
-            <div key={s.label}>
-              <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-1">{s.label}</span>
-              <span className="text-lg font-light text-foreground/50">{s.value}</span>
-            </div>
-          ))}
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-6 mb-20">
+        <DataCard label="Engine" value="UE5" sub="5.4+" />
+        <DataCard label="Renderer" value="DX12" sub="Ray Tracing" />
+        <DataCard label="Physics" value="CHAOS" sub="Real-time" />
+        <DataCard label="Audio" value="META" sub="Sounds" />
+        <DataCard label="AI" value="BEHAVIOR" sub="Trees + ML" />
+        <DataCard label="Net" value="DEDI" sub="Servers" />
       </div>
 
-      {/* UE5 Features */}
-      <div className="mb-16">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">UE5 FEATURES</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ue5Features.map((f) => (
-            <div key={f.name}>
-              <h4 className="text-[13px] font-medium text-foreground/50 mb-1">{f.name}</h4>
-              <p className="text-[12px] text-foreground/25 font-light leading-relaxed">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Performance targets */}
-      <div className="mb-16">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">PERFORMANCE TARGETS</h3>
+      {/* Core Features */}
+      <div className="mb-20">
+        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-8">CORE FEATURES</h3>
         <div className="space-y-0">
-          {platforms.map((p, i) => (
-            <div key={i} className="flex items-center gap-6 py-3 border-b border-foreground/[0.04]">
-              <span className="text-[13px] text-foreground/50 w-40 shrink-0">{p.platform}</span>
-              <span className="text-[12px] text-foreground/20 w-24 shrink-0">{p.res}</span>
-              <span className="font-mono text-[11px] text-foreground/20 w-16 shrink-0 tabular-nums">{p.fps}</span>
-              <span className="text-[12px] text-foreground/20">{p.quality}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Custom Systems */}
-      <div className="mb-16">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">CUSTOM C++ SYSTEMS</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {customSystems.map((s) => (
-            <div key={s.name}>
-              <div className="flex items-baseline gap-2 mb-1">
-                <h4 className="text-[13px] font-medium text-foreground/50">{s.name}</h4>
-                <span className="font-mono text-[8px] text-foreground/15 tracking-wider">{s.type}</span>
+          {features.map((f, i) => (
+            <div key={i} className="py-6 border-b border-foreground/[0.04]">
+              <div className="flex flex-col md:flex-row md:items-start gap-4">
+                <div className="flex-1">
+                  <h4 className="text-[14px] font-medium text-foreground/60 mb-1">{f.title}</h4>
+                  <p className="text-[13px] text-foreground/25 font-light leading-relaxed max-w-xl">{f.desc}</p>
+                </div>
+                <div className="flex flex-wrap gap-2 shrink-0">
+                  {f.tech.map((t) => (
+                    <span key={t} className="font-mono text-[9px] text-amber/30 px-2 py-0.5 bg-amber/[0.05] tracking-wider">
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <p className="text-[12px] text-foreground/25 font-light">{s.desc}</p>
+              {f.relatedLevels && (
+                <div className="flex gap-4 mt-3">
+                  <Link href={f.relatedLevels} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                    {f.relatedLevels === "/levels" ? "LEVELS" : f.relatedLevels === "/characters" ? "CHARACTERS" : "GAMEPLAY"} &rarr;
+                  </Link>
+                </div>
+              )}
             </div>
           ))}
         </div>
       </div>
 
-      {/* Sound Design */}
-      <div className="mb-16">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">THREE-LAYER HORROR SOUND MODEL</h3>
-        <div className="space-y-0">
-          {soundDesign.map((s, i) => (
-            <div key={i} className="flex items-start gap-6 py-4 border-b border-foreground/[0.04]">
-              <div className="w-1 h-8 bg-foreground/10 shrink-0" />
-              <div className="w-28 shrink-0">
-                <span className="font-mono text-[10px] text-foreground/25 tracking-wider block">{s.layer}</span>
-                <span className="font-mono text-[9px] text-foreground/10">{s.timing}</span>
-              </div>
-              <p className="text-[12px] text-foreground/30 font-light">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* The Hum */}
-      <div className="mb-16">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">THE HUM — FREQUENCY PROGRESSION</h3>
-        <div className="flex items-end gap-2 h-24">
-          {humFrequencies.map((h, i) => (
-            <div key={i} className="flex-1 flex flex-col items-center gap-1">
-              <span className="font-mono text-[9px] text-foreground/20">{h.hz}</span>
-              <div
-                className="w-full bg-foreground/[0.06] rounded-t"
-                style={{ height: `${80 - i * 15}px` }}
-              />
-              <span className="font-mono text-[8px] text-foreground/10">{h.level}</span>
-            </div>
-          ))}
-        </div>
-        <p className="mt-3 text-[10px] text-foreground/15 font-mono leading-relaxed">
-          Each entity has unique sound signatures. The Smiler is absolutely silent (horror of silence).
-          The Citizens have perfectly normal footsteps but no breathing, no rustling — the absence of expected human sounds.
-        </p>
-      </div>
-
-      {/* PS5 DualSense */}
-      <div className="mb-16">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">PS5 DUALSENSE</h3>
+      {/* Platform Targets */}
+      <div className="mb-20">
+        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">PLATFORM TARGETS</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { feature: "Adaptive Triggers", desc: "Weapon jam resistance and heartbeat pulse" },
-            { feature: "Haptic Feedback", desc: "The Hum and entity proximity" },
-            { feature: "Tempest Engine", desc: "3D audio positioning" },
-          ].map((d) => (
-            <div key={d.feature}>
-              <span className="text-[13px] font-medium text-foreground/50 block mb-1">{d.feature}</span>
-              <p className="text-[12px] text-foreground/25 font-light">{d.desc}</p>
+            { platform: "PC", specs: "Recommended: RTX 3070 / RX 6800, 16GB RAM, SSD. Target: 1440p60.", status: "PRIMARY" },
+            { platform: "PS5", specs: "Native port. Ray tracing, DualSense haptics, 3D audio. Target: 4K30 / 1440p60.", status: "DAY ONE" },
+            { platform: "XBOX SERIES X|S", specs: "Optimized. Smart Delivery, Game Pass consideration. Target: 4K30 / 1080p60.", status: "DAY ONE" },
+          ].map((p) => (
+            <div key={p.platform} className="py-4 border-b border-foreground/[0.04]">
+              <div className="flex items-baseline gap-3 mb-2">
+                <span className="text-[14px] text-foreground/50 font-medium">{p.platform}</span>
+                <span className="font-mono text-[9px] text-amber/30 tracking-wider">{p.status}</span>
+              </div>
+              <p className="text-[12px] text-foreground/25 font-light leading-relaxed">{p.specs}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Technical Challenges */}
-      <div>
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">KEY TECHNICAL CHALLENGES</h3>
-        <div className="space-y-6">
-          {[
-            { challenge: "Procedural Room Rearrangement", desc: "Seamlessly swapping room modules without player noticing — room cells with standardized connections, visual distraction during swap." },
-            { challenge: "Co-op Sanity Synchronization", desc: "All players experience same hallucinations simultaneously — server-authoritative sanity, seed-based generation." },
-            { challenge: "Level 11 Infinite City Streaming", desc: "World Partition with aggressive LOD, procedural building generation at distance, handcrafted 'hero' areas near player." },
-            { challenge: "Tonal Shift Implementation", desc: "Hundreds of small variable adjustments over time, no single 'switch'. The transformation must feel organic." },
-          ].map((c, i) => (
-            <div key={i}>
-              <h4 className="text-[13px] font-medium text-foreground/50 mb-1">{c.challenge}</h4>
-              <p className="text-[12px] text-foreground/25 font-light leading-relaxed max-w-2xl">{c.desc}</p>
+      <div className="mb-20">
+        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-8">TECHNICAL CHALLENGES</h3>
+        <div className="space-y-4">
+          {challenges.map((c, i) => (
+            <div key={i} className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 py-3 border-b border-foreground/[0.04]">
+              <span className="text-[13px] text-foreground/40 flex-1">{c.challenge}</span>
+              <span className={`font-mono text-[9px] tracking-[0.15em] ${
+                c.risk === "HIGH" ? "text-amber/50" : "text-foreground/20"
+              }`}>
+                {c.risk}
+              </span>
+              <span className="text-[12px] text-foreground/20 font-light max-w-xs">{c.approach}</span>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Cross-links */}
+      <div className="mt-16 pt-8 border-t border-foreground/[0.06]">
+        <div className="flex flex-wrap gap-6">
+          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+            GAMEPLAY SYSTEMS &rarr;
+          </Link>
+          <Link href="/levels" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+            LEVEL DESIGN &rarr;
+          </Link>
+          <Link href="/characters" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+            CHARACTER AI &rarr;
+          </Link>
+          <Link href="/overview" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+            PROJECT OVERVIEW &rarr;
+          </Link>
         </div>
       </div>
     </div>

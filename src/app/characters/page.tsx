@@ -1,239 +1,200 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import SectionHeader from "@/components/SectionHeader";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import DataCard from "@/components/DataCard";
 
 const characters = [
   {
-    name: "Sgt. Mara Vance",
-    role: "Team Leader",
-    age: 34,
-    class: "Player Character",
-    voiceRef: "Sigourney Weaver, Regina King",
-    color: "#d4a017",
-    background: "Detroit, foster care, Army at 18, Special Forces at 24. Three combat deployments.",
-    personality: "Professional, decisive, protective. Lowers her voice when angry. Remembers every face she has seen die.",
-    arc: "Confident leader → Concerned → Claustrophobic/panicking → Broken by finding her own desk in Level 4 → Resigned determination in Level 11.",
-    asyncNote: "Anomalous sensitivity — 'feeling watched' in empty rooms, recurring dreams of yellow hallways since childhood.",
-    endings: ["The Sacrifice (holds exit open)", "The Escape (bittersweet)", "The Break (refuses to leave)", "The Truth (secret whistleblower ending)"],
-    stats: { combat: 95, leadership: 98, sanity: 70, stealth: 80 },
-    keyMoment: "Finding her own desk in Level 4 with her foster brother's photo — the Backrooms knew her before she knew them.",
+    name: "MAYA \"VIPER\" OSEI",
+    role: "Squad Leader / Recon Specialist",
+    unit: "THRESHOLD-1",
+    arc: "Determined leader watching her unit break down. Decisions carry weight.",
+    arcDetail: "Maya begins confident and controlled, issuing orders and maintaining morale. As the campaign progresses and the squad's sanity frays, she's forced to choose between mission objectives and protecting her people. Her arc culminates in a decision that defines whether THRESHOLD survives as a unit — or as individuals.",
+    stats: { loyalty: 92, aggression: 68, sanity: 85 },
+    voice: "Command, Viper. Level 4 is compromised. We've lost the exit point — the geometry changed while we were inside.",
+    relatedLevel: "/levels",
+    relatedGameplay: "/gameplay",
   },
   {
-    name: "Cpl. Elias Kade",
-    role: "Point Man",
-    age: 24,
-    class: "Assault",
-    voiceRef: "Michael B. Jordan, Jonathan Majors",
-    color: "#3a7d44",
-    background: "Mobile, Alabama. Pentecostal family. Enlisted at 20. First real operation.",
-    personality: "Eager, faithful, the squad's heart. His faith is the load-bearing wall of his psychology.",
-    arc: "Eager → Concerned → Separated in Level 2, returns changed, singing hymns → Preaching → Fanatical, serene, possibly prophetic.",
-    asyncNote: "In Level 2, separated for 20 minutes, found sitting among Drowned who did not touch him. 'They don't want me yet.'",
-    endings: ["The Prophet (walks into city, voice on radio)", "The Broken Believer (survives, institutionalized)", "The Martyr (dies protecting squad)"],
-    stats: { combat: 85, leadership: 60, sanity: 55, stealth: 70 },
-    keyMoment: "Level 11 sermon: 'The test isn't to escape. The test is to be worth taking. And I am.'",
+    name: "DIEGO \"HARDHAT\" RAMIREZ",
+    role: "Combat Engineer / Heavy Weapons",
+    unit: "THRESHOLD-1",
+    arc: "Steady professional slowly unraveling as the environment warps.",
+    arcDetail: "Diego's calm under fire makes him the squad's anchor. But the Backrooms specifically target his sense of order — things that should be straight aren't, distances don't match, and his engineering precision becomes a liability when the rules change. His paranoia threatens to turn the squad's strongest member into its greatest danger.",
+    stats: { loyalty: 88, aggression: 95, sanity: 72 },
+    voice: "The hallway we came through is gone. Not blocked — gone. I measured it. It was 47 meters. Now it's nothing.",
+    relatedLevel: "/levels",
+    relatedLore: "/lore",
   },
   {
-    name: "Lt. Darius Holt",
-    role: "Tactician",
-    age: 36,
-    class: "Overwatch/Sniper",
-    voiceRef: "Idris Elba, Mahershala Ali",
-    color: "#2980b9",
-    background: "Boston, working-class. Green Beret. Two combat deployments + classified CIA operation.",
-    personality: "The cynic, the rock. Dry humor under pressure. Fear is boring to him.",
-    arc: "Skeptical → Concerned but masking → Steady, supporting Vance → Suspicious, methodical → Betrayed by CIA reveal, exhausted, still leading.",
-    asyncNote: "In 2019, participated in a classified operation in Kazakhstan containing a localized noclip event. He has been in a Backrooms-adjacent situation before and did not tell the squad.",
-    endings: ["The Captain (assumes command)", "The Confession (tells squad everything)", "The Stay (refuses to leave without everyone)"],
-    stats: { combat: 90, leadership: 85, sanity: 90, stealth: 95 },
-    keyMoment: "Resumes playing chess alone in Level 11 after Reyes's disappearance — moving both sides of the board.",
+    name: "ZHENYA \"SPECTR\" VOLKOV",
+    role: "Intelligence / Anomalous Tech Specialist",
+    unit: "THRESHOLD-2",
+    arc: "Cold operative hiding a deeper connection to the Backrooms.",
+    arcDetail: "Zhenya's knowledge of Async Technologies and the Backrooms makes her invaluable — and suspicious. She knows more than she reveals, her technical expertise bordering on prescient. The squad must decide whether to trust her mysterious competence or treat her as a corporate liability. Her knowledge of Async's experiments hints at a personal history.",
+    stats: { loyalty: 55, aggression: 42, sanity: 91 },
+    voice: "This isn't random. The entities are following a script. Someone wrote this behavior — and Async has the manual.",
+    relatedLevel: "/levels",
+    relatedLore: "/lore",
   },
   {
-    name: "Spec. Juno Reyes",
-    role: "Tech Specialist",
-    age: 26,
-    class: "Engineer",
-    voiceRef: "Tessa Thompson, Rosa Salazar",
-    color: "#8e44ad",
-    background: "East LA. Caltech CS graduate. Recruited for anomalous systems interfacing. 94% success rate with Async equipment.",
-    personality: "The nerd, the witness. Makes pop culture references, gets excited about entity behavior. Documents everything. The only person who finds the Backrooms genuinely interesting.",
-    arc: "Excited/curious → Professional concern → Fascinated and frightened → Disappears in Level 4.",
-    asyncNote: "Steps into a wall that ripples like water. Her camera continues recording for 47 minutes. Final recording: 'The hum isn't noise. It's music. And I finally know the words.'",
-    endings: ["Legacy continues through voice echoes, notes, and a chess set in Level 11"],
-    stats: { combat: 55, leadership: 50, sanity: 85, stealth: 75 },
-    keyMoment: "Disappearance in Level 4 — steps into a wall that ripples like water, camera recording for 47 minutes.",
+    name: "JAMES \"BISHOP\" KOWALSKI",
+    role: "Medic / Psychological Operations",
+    unit: "THRESHOLD-2",
+    arc: "Medic treating injuries that shouldn't exist in reality.",
+    arcDetail: "Bishop's medical training doesn't cover wounds caused by non-Euclidean geometry or psychological damage from seeing things that can't exist. He watches his teammates suffer injuries that defy explanation and struggles to maintain his own mental health while being everyone's caretaker. His journals become increasingly unhinged.",
+    stats: { loyalty: 94, aggression: 35, sanity: 68 },
+    voice: "Viper, I can't treat what I can't understand. Diego's vitals are impossible — his heart rate is negative. That's not medically possible.",
+    relatedLevel: "/levels",
+    relatedGameplay: "/gameplay",
   },
   {
-    name: "Dr. Aris Thorne",
-    role: "Async Liaison",
-    age: 41,
-    class: "Anomalist",
-    voiceRef: "Tom Hiddleston, Andrew Scott",
-    color: "#c0392b",
-    background: "Cambridge, England. PhD at 24. 14 voluntary Backrooms expeditions. Carries a classified data transmitter — his primary mission objective.",
-    personality: "The professional, the guilty man. Polite, precise, slightly condescending. Voluntarily came on a mission where he knew the squad would likely die.",
-    arc: "Superior/detached → Concerned → Frightened → Full confession when transmitter destroyed → Redeemed or damned.",
-    asyncNote: "Operation THRESHOLD was never a security mission — it was a data-gathering exercise. The 'extraction point' was theoretical. The squad were test subjects.",
-    endings: ["The Redemption (sacrifices himself to open exit)", "The Whistleblower (leaks Async data)", "The Acclimation (stays in Backrooms, becomes part of it)"],
-    stats: { combat: 40, leadership: 70, sanity: 60, stealth: 45 },
-    keyMoment: "Confession: 'Operation THRESHOLD was never a security mission... The extraction point was theoretical. You were never supposed to come home.'",
+    name: "RIVER \"GLITCH\" TANAKA",
+    role: "Communications / Electronic Warfare",
+    unit: "THRESHOLD-2",
+    arc: "Comms tech who starts receiving transmissions from herself.",
+    arcDetail: "River's job is maintaining contact with Async Command. But the Backrooms interfere with communications in increasingly personal ways — she begins receiving messages that appear to come from herself, describing events that haven't happened yet. Is the Backrooms showing her the future, or is she losing her grip on reality?",
+    stats: { loyalty: 82, aggression: 38, sanity: 52 },
+    voice: "Command, this is Glitch. I'm receiving... myself. These transmissions are dated three days from now. They're describing exactly what's happening right now.",
+    relatedLevel: "/levels",
+    relatedLore: "/lore",
   },
 ];
 
-function StatBar({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="flex items-center gap-3">
-      <span className="font-mono text-[9px] text-foreground/15 w-14 tracking-wider">{label}</span>
-      <div className="flex-1 h-[2px] bg-foreground/[0.04] overflow-hidden">
-        <div
-          className="h-full bg-foreground/20 transition-all"
-          style={{ width: `${value}%` }}
-        />
-      </div>
-      <span className="font-mono text-[10px] text-foreground/20 w-6 text-right tabular-nums">{value}</span>
-    </div>
-  );
-}
-
-function CharacterCard({ char, isOpen, onToggle }: { char: typeof characters[0]; isOpen: boolean; onToggle: () => void }) {
-  return (
-    <div className="py-6">
-      <button onClick={onToggle} className="w-full text-left group">
-        <div className="flex items-baseline gap-4 mb-1">
-          <h3 className="text-lg font-light text-foreground/70 group-hover:text-foreground/90 transition-colors">
-            {char.name}
-          </h3>
-          {isOpen ? (
-            <ChevronDown size={14} className="text-foreground/15" />
-          ) : (
-            <ChevronRight size={14} className="text-foreground/15" />
-          )}
-        </div>
-        <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[9px] text-foreground/15 tracking-[0.15em]">{char.role}</span>
-          <span className="font-mono text-[9px] text-foreground/10">AGE {char.age}</span>
-          <span className="font-mono text-[9px] text-foreground/10">{char.class}</span>
-        </div>
-      </button>
-
-      {isOpen && (
-        <div className="mt-6 ml-0 md:ml-8 space-y-6">
-          {/* Background */}
-          <div>
-            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-2">BACKGROUND</span>
-            <p className="text-[13px] text-foreground/40 font-light leading-relaxed">{char.background}</p>
-          </div>
-
-          {/* Personality */}
-          <div>
-            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-2">PERSONALITY</span>
-            <p className="text-[13px] text-foreground/40 font-light leading-relaxed">{char.personality}</p>
-          </div>
-
-          {/* Character Arc */}
-          <div>
-            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-2">CHARACTER ARC</span>
-            <p className="text-[13px] text-foreground/40 font-light leading-relaxed">{char.arc}</p>
-          </div>
-
-          {/* Async Note */}
-          <div>
-            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-2">ASYNC FILE NOTE</span>
-            <p className="text-[13px] text-amber/40 font-light leading-relaxed italic">{char.asyncNote}</p>
-          </div>
-
-          {/* Key Moment */}
-          <div>
-            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-2">KEY MOMENT</span>
-            <p className="text-[13px] text-foreground/40 font-light leading-relaxed">{char.keyMoment}</p>
-          </div>
-
-          {/* Stats */}
-          <div>
-            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-3">CAPABILITY ASSESSMENT</span>
-            <div className="space-y-2">
-              <StatBar label="COMBAT" value={char.stats.combat} />
-              <StatBar label="LEADER" value={char.stats.leadership} />
-              <StatBar label="SANITY" value={char.stats.sanity} />
-              <StatBar label="STEALTH" value={char.stats.stealth} />
-            </div>
-          </div>
-
-          {/* Endings */}
-          <div>
-            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] block mb-2">POSSIBLE ENDINGS</span>
-            <div className="flex flex-wrap gap-x-4 gap-y-1">
-              {char.endings.map((e, i) => (
-                <span key={i} className="text-[11px] text-foreground/20 font-light">
-                  {e}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Voice Reference */}
-          <div className="font-mono text-[9px] text-foreground/10 tracking-wider pt-2">
-            VOICE REFERENCE: {char.voiceRef}
-          </div>
-        </div>
-      )}
-
-      <div className="mt-6 h-px bg-foreground/[0.04]" />
-    </div>
-  );
-}
-
 export default function CharactersPage() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [expanded, setExpanded] = useState<number | null>(null);
 
   return (
     <div className="px-6 md:px-12 lg:px-24 py-16 md:py-24">
       <SectionHeader
         code="02 / CHARACTERS"
-        title="Characters"
-        subtitle="Fireteam THRESHOLD — Five individuals. One mission. Zero guarantees."
+        title="Fireteam THRESHOLD"
+        subtitle="Five soldiers deployed to secure and contain anomalous entities inside the Backrooms"
       />
 
-      {/* Relationship note */}
-      <div className="mb-12">
-        <p className="font-mono text-[11px] text-foreground/20 leading-relaxed max-w-2xl">
-          Dynamic trust web — relationships evolve dramatically from campaign start to end.
-          Vance starts "Respects" Holt and "Protective" of Kade; ends "Depends on" Holt and "Barely speaks to" Kade.
-        </p>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-6 mb-20">
+        <DataCard label="Squad" value="5" sub="Operators" />
+        <DataCard label="Unit" value="THRESHOLD" sub="1 & 2" />
+        <DataCard label="Loyalty" value="84%" sub="Average" />
+        <DataCard label="Aggression" value="56%" sub="Average" />
+        <DataCard label="Sanity" value="74%" sub="Average" />
+        <DataCard label="Status" value="ACTIVE" sub="All operatives" />
       </div>
 
-      {/* Character cards */}
-      <div>
+      {/* Character List */}
+      <div className="space-y-0">
         {characters.map((char, i) => (
-          <CharacterCard
-            key={char.name}
-            char={char}
-            isOpen={openIndex === i}
-            onToggle={() => setOpenIndex(openIndex === i ? null : i)}
-          />
+          <div
+            key={i}
+            className="py-6 border-b border-foreground/[0.04] cursor-pointer group"
+            onClick={() => setExpanded(expanded === i ? null : i)}
+          >
+            <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
+              <div className="flex-1">
+                <div className="flex items-baseline gap-3 mb-1">
+                  <h3 className="text-[14px] font-medium text-foreground/70 group-hover:text-amber/70 transition-colors">
+                    {char.name}
+                  </h3>
+                  <span className="font-mono text-[9px] text-foreground/10 tracking-wider">{char.role}</span>
+                </div>
+                <p className="text-[13px] text-foreground/25 font-light leading-relaxed max-w-xl">
+                  <span className="text-foreground/40">{char.arc}</span>
+                </p>
+              </div>
+
+              {/* Visual stat bars */}
+              <div className="flex gap-6 shrink-0">
+                {Object.entries(char.stats).map(([key, val]) => (
+                  <div key={key} className="w-16">
+                    <div className="flex items-baseline justify-between mb-1">
+                      <span className="font-mono text-[8px] text-foreground/15 tracking-wider uppercase">{key.slice(0, 4)}</span>
+                      <span className="font-mono text-[9px] text-foreground/20">{val}</span>
+                    </div>
+                    <div className="h-[2px] bg-foreground/[0.04] overflow-hidden">
+                      <div className="h-full bg-amber/30" style={{ width: `${val}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <span className="font-mono text-[10px] text-foreground/10 group-hover:text-amber/30 transition-colors">
+                {expanded === i ? "−" : "+"}
+              </span>
+            </div>
+
+            {/* Expanded Detail */}
+            {expanded === i && (
+              <div className="mt-4 pt-4 border-t border-foreground/[0.04] pl-4">
+                <p className="text-[13px] text-foreground/35 font-light leading-relaxed mb-4 max-w-2xl">
+                  {char.arcDetail}
+                </p>
+                <blockquote className="text-[13px] text-foreground/20 font-light italic border-l border-amber/10 pl-3 mb-4 max-w-xl">
+                  &quot;{char.voice}&quot;
+                </blockquote>
+                <div className="flex gap-4">
+                  <Link href={char.relatedLevel} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                    RELATED LEVELS &rarr;
+                  </Link>
+                  {char.relatedGameplay && (
+                    <Link href={char.relatedGameplay} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                      COMBAT SYSTEMS &rarr;
+                    </Link>
+                  )}
+                  {char.relatedLore && (
+                    <Link href={char.relatedLore} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                      ASYNC LORE &rarr;
+                    </Link>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         ))}
       </div>
 
-      {/* Multiplayer Operatives */}
+      {/* Squad Relationships Visual */}
       <div className="mt-20">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-8">
-          MULTIPLAYER OPERATIVES
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-8">SQUAD RELATIONSHIPS</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            { name: "ROOK", role: "Former Async Security", ability: "Veteran's Eye — highlights entity weak points" },
-            { name: "VEX", role: "Civilian Survivor", ability: "Wanderer's Path — reveals safe routes" },
-            { name: "SAINT", role: "Military Chaplain", ability: "Counsel — restores ally sanity" },
-            { name: "NULL", role: "Async Black Ops", ability: "Sanitize — instantly kills T-2 entities in radius" },
-          ].map((op) => (
-            <div key={op.name}>
-              <h4 className="text-[13px] font-medium text-foreground/60 mb-1">{op.name}</h4>
-              <span className="font-mono text-[9px] text-foreground/15 tracking-[0.15em] block mb-2">{op.role}</span>
-              <p className="text-[12px] text-foreground/25 font-light">{op.ability}</p>
+            { from: "MAYA → DIEGO", type: "TRUST", strength: 95, desc: "Diego follows Maya without question. She sees him as the squad's backbone." },
+            { from: "MAYA → ZHENYA", type: "SUSPICION", strength: 45, desc: "Maya respects Zhenya's competence but distrusts her loyalty. Their tension is constant." },
+            { from: "JAMES → ZHENYA", type: "CONCERN", strength: 72, desc: "James worries Zhenya is manipulating the squad. He monitors her behavior closely." },
+            { from: "RIVER → ZHENYA", type: "FEAR", strength: 30, desc: "River's transmissions suggest Zhenya knows more than she admits. The paranoia builds." },
+            { from: "DIEGO → RIVER", type: "PROTECTION", strength: 88, desc: "Diego tries to shield River from the worst of it, but she's already seeing things." },
+            { from: "DIEGO → JAMES", type: "RELIANCE", strength: 80, desc: "Diego depends on James to keep him grounded. When James falters, so does Diego." },
+          ].map((rel, i) => (
+            <div key={i} className="py-4 border-b border-foreground/[0.04]">
+              <div className="flex items-baseline justify-between mb-2">
+                <span className="font-mono text-[9px] text-foreground/25 tracking-wider">{rel.from}</span>
+                <span className="font-mono text-[9px] text-amber/40 tracking-wider">{rel.type}</span>
+              </div>
+              <p className="text-[12px] text-foreground/25 font-light leading-relaxed mb-2">{rel.desc}</p>
+              <div className="h-[2px] bg-foreground/[0.04] overflow-hidden">
+                <div className="h-full bg-amber/20" style={{ width: `${rel.strength}%` }} />
+              </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Cross-links */}
+      <div className="mt-16 pt-8 border-t border-foreground/[0.06]">
+        <div className="flex flex-wrap gap-6">
+          <Link href="/levels" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+            EXPLORE THE LEVELS &rarr;
+          </Link>
+          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+            COMBAT & SURVIVAL &rarr;
+          </Link>
+          <Link href="/lore" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+            ASYNC TECHNOLOGIES &rarr;
+          </Link>
+          <Link href="/overview" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+            PROJECT OVERVIEW &rarr;
+          </Link>
         </div>
       </div>
     </div>
