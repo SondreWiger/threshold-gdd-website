@@ -11,7 +11,7 @@ const levels = [
     subtitle: "The Office Complex",
     type: "TUTORIAL / ESTABLISHING",
     threat: "LOW",
-    threatColor: "text-foreground/15",
+    threatColor: "text-foreground/55",
     geometry: "Normal",
     duration: "2–3 hours",
     desc: "An infinite expanse of fluorescent-lit office hallways. Standardized cubicles stretch to every horizon. Fluorescent lights buzz with a frequency that creates a persistent migraine. The geometry is maddeningly regular.",
@@ -26,7 +26,7 @@ const levels = [
     subtitle: "The Machine Level",
     type: "ESCALATION",
     threat: "MEDIUM",
-    threatColor: "text-amber/40",
+    threatColor: "text-amber/55",
     geometry: "Semi-distorted",
     duration: "3–4 hours",
     desc: "Massive industrial spaces housing machinery of unknown purpose. Conveyor belts move through walls into darkness. Steam vents create sound patterns that almost resemble speech.",
@@ -41,7 +41,7 @@ const levels = [
     subtitle: "The Mimic Level",
     type: "PSYCHOLOGICAL HORROR",
     threat: "HIGH",
-    threatColor: "text-amber/60",
+    threatColor: "text-amber/75",
     geometry: "Actively warping",
     duration: "3–4 hours",
     desc: "Endless rows of suburban homes from different decades. Some interiors are from the squad's actual memories. The Backrooms is trying to understand them.",
@@ -56,7 +56,7 @@ const levels = [
     subtitle: "Async Forward Operating Base",
     type: "NARRATIVE HUB",
     threat: "VARIES",
-    threatColor: "text-foreground/15",
+    threatColor: "text-foreground/55",
     geometry: "Mixed",
     duration: "2–3 hours",
     desc: "A partially corrupted Async Technologies research station. Contains equipment caches, recorded logs from previous expeditions, and the remnants of a previous squad that didn't make it out.",
@@ -108,31 +108,31 @@ export default function LevelsPage() {
         {levels.map((level, i) => (
           <div
             key={i}
-            className="py-6 border-b border-foreground/[0.04] cursor-pointer group"
+            className="py-6 border-b border-foreground/[0.08] cursor-pointer group"
             onClick={() => setSelected(selected === i ? null : i)}
           >
             <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
               <div className="flex-1">
                 <div className="flex items-baseline gap-3 mb-1">
-                  <span className="font-mono text-[10px] text-foreground/10">LVL {i + 1}</span>
-                  <h3 className="text-[14px] font-medium text-foreground/70 group-hover:text-amber/70 transition-colors">
+                  <span className="font-mono text-[10px] text-foreground/75">LVL {i + 1}</span>
+                  <h3 className="text-[14px] font-medium text-foreground/95 group-hover:text-amber/85 transition-colors">
                     {level.name}
                   </h3>
-                  <span className="font-mono text-[9px] text-foreground/10 tracking-wider">{level.type}</span>
+                  <span className="font-mono text-[9px] text-foreground/75 tracking-wider">{level.type}</span>
                 </div>
-                <p className="text-[13px] text-foreground/25 font-light">{level.subtitle}</p>
+                <p className="text-[13px] text-foreground/75 font-light">{level.subtitle}</p>
               </div>
 
               <div className="flex items-center gap-6 shrink-0">
                 <div className="text-right">
-                  <span className="font-mono text-[8px] text-foreground/15 tracking-wider block">THREAT</span>
+                  <span className="font-mono text-[8px] text-foreground/55 tracking-wider block">THREAT</span>
                   <span className={`font-mono text-[10px] ${level.threatColor}`}>{level.threat}</span>
                 </div>
                 <div className="text-right">
-                  <span className="font-mono text-[8px] text-foreground/15 tracking-wider block">TIME</span>
-                  <span className="font-mono text-[10px] text-foreground/20">{level.duration}</span>
+                  <span className="font-mono text-[8px] text-foreground/55 tracking-wider block">TIME</span>
+                  <span className="font-mono text-[10px] text-foreground/65">{level.duration}</span>
                 </div>
-                <span className="font-mono text-[10px] text-foreground/10 group-hover:text-amber/30 transition-colors">
+                <span className="font-mono text-[10px] text-foreground/75 group-hover:text-amber/45 transition-colors">
                   {selected === i ? "−" : "+"}
                 </span>
               </div>
@@ -140,44 +140,44 @@ export default function LevelsPage() {
 
             {/* Expanded Detail */}
             {selected === i && (
-              <div className="mt-4 pt-4 border-t border-foreground/[0.04]">
-                <p className="text-[13px] text-foreground/35 font-light leading-relaxed mb-4 max-w-2xl">
+              <div className="mt-4 pt-4 border-t border-foreground/[0.08]">
+                <p className="text-[13px] text-foreground/85 font-light leading-relaxed mb-4 max-w-2xl">
                   {level.desc}
                 </p>
 
                 {/* Visual distortion bar */}
                 <div className="mb-4">
-                  <span className="font-mono text-[8px] text-foreground/15 tracking-wider block mb-1">GEOMETRY DISTORTION</span>
-                  <div className="font-mono text-[10px] text-amber/30 tracking-wider">{level.visual}</div>
+                  <span className="font-mono text-[8px] text-foreground/55 tracking-wider block mb-1">GEOMETRY DISTORTION</span>
+                  <div className="font-mono text-[10px] text-amber/45 tracking-wider">{level.visual}</div>
                 </div>
 
                 {/* Threats */}
                 <div className="mb-4">
-                  <span className="font-mono text-[8px] text-foreground/15 tracking-wider block mb-2">PRIMARY THREATS</span>
+                  <span className="font-mono text-[8px] text-foreground/55 tracking-wider block mb-2">PRIMARY THREATS</span>
                   <div className="flex flex-wrap gap-2">
                     {level.threats.map((t, j) => (
-                      <span key={j} className="text-[11px] text-foreground/25 font-light px-2 py-0.5 bg-foreground/[0.02]">
+                      <span key={j} className="text-[11px] text-foreground/75 font-light px-2 py-0.5 bg-foreground/[0.05]">
                         {t}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <p className="text-[12px] text-foreground/20 font-light italic mb-3">{level.mechanic}</p>
+                <p className="text-[12px] text-foreground/65 font-light italic mb-3">{level.mechanic}</p>
 
                 <div className="flex gap-4">
                   {level.relatedCharacters && (
-                    <Link href={level.relatedCharacters} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                    <Link href={level.relatedCharacters} className="font-mono text-[9px] text-foreground/55 hover:text-amber/55 transition-colors tracking-wider">
                       SQUAD &rarr;
                     </Link>
                   )}
                   {level.relatedLore && (
-                    <Link href={level.relatedLore} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                    <Link href={level.relatedLore} className="font-mono text-[9px] text-foreground/55 hover:text-amber/55 transition-colors tracking-wider">
                       LORE &rarr;
                     </Link>
                   )}
                   {level.relatedGameplay && (
-                    <Link href={level.relatedGameplay} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                    <Link href={level.relatedGameplay} className="font-mono text-[9px] text-foreground/55 hover:text-amber/55 transition-colors tracking-wider">
                       SYSTEMS &rarr;
                     </Link>
                   )}
@@ -190,18 +190,18 @@ export default function LevelsPage() {
 
       {/* Level Progression Visual */}
       <div className="mb-20">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">LEVEL PROGRESSION</h3>
+        <h3 className="font-mono text-[10px] text-foreground/65 tracking-[0.2em] mb-6">LEVEL PROGRESSION</h3>
         <div className="space-y-3">
           {levels.map((level, i) => (
             <div key={i} className="flex items-center gap-4">
-              <span className="font-mono text-[9px] text-foreground/10 w-12 shrink-0">LVL {i + 1}</span>
-              <div className="flex-1 h-[3px] bg-foreground/[0.04] overflow-hidden">
+              <span className="font-mono text-[9px] text-foreground/75 w-12 shrink-0">LVL {i + 1}</span>
+              <div className="flex-1 h-[3px] bg-foreground/[0.08] overflow-hidden">
                 <div
-                  className="h-full bg-amber/20 transition-all duration-500"
+                  className="h-full bg-amber/40 transition-all duration-500"
                   style={{ width: `${20 + i * 20}%` }}
                 />
               </div>
-              <span className="font-mono text-[9px] text-foreground/15 w-16 text-right shrink-0">{level.duration}</span>
+              <span className="font-mono text-[9px] text-foreground/55 w-16 text-right shrink-0">{level.duration}</span>
             </div>
           ))}
         </div>
@@ -209,20 +209,20 @@ export default function LevelsPage() {
 
       {/* Threat Scale */}
       <div className="mb-20">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">THREAT SCALE</h3>
+        <h3 className="font-mono text-[10px] text-foreground/65 tracking-[0.2em] mb-6">THREAT SCALE</h3>
         <div className="grid grid-cols-5 gap-2">
           {["LOW", "MEDIUM", "HIGH", "EXTREME", "LETHAL"].map((t, i) => (
-            <div key={t} className="text-center py-3 bg-foreground/[0.02]">
+            <div key={t} className="text-center py-3 bg-foreground/[0.05]">
               <span className={`font-mono text-[9px] tracking-wider ${
-                i < 2 ? "text-foreground/20" :
-                i < 3 ? "text-amber/30" :
+                i < 2 ? "text-foreground/65" :
+                i < 3 ? "text-amber/45" :
                 i < 4 ? "text-amber/50" :
                 "text-red-400/40"
               }`}>
                 {t}
               </span>
-              <div className="mt-2 h-[2px] bg-foreground/[0.04] overflow-hidden mx-2">
-                <div className="h-full bg-amber/20" style={{ width: `${(i + 1) * 20}%` }} />
+              <div className="mt-2 h-[2px] bg-foreground/[0.08] overflow-hidden mx-2">
+                <div className="h-full bg-amber/40" style={{ width: `${(i + 1) * 20}%` }} />
               </div>
             </div>
           ))}
@@ -230,18 +230,18 @@ export default function LevelsPage() {
       </div>
 
       {/* Cross-links */}
-      <div className="mt-16 pt-8 border-t border-foreground/[0.06]">
+      <div className="mt-16 pt-8 border-t border-foreground/[0.12]">
         <div className="flex flex-wrap gap-6">
-          <Link href="/characters" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/characters" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             MEET THE SQUAD &rarr;
           </Link>
-          <Link href="/lore" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/lore" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             BACKROOMS LORE &rarr;
           </Link>
-          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             GAMEPLAY SYSTEMS &rarr;
           </Link>
-          <Link href="/maps" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/maps" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             LEVEL MAPS &rarr;
           </Link>
         </div>

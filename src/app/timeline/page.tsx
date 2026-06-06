@@ -9,7 +9,7 @@ const phases = [
     title: "FOUNDATION",
     duration: "MONTHS 1–3",
     status: "NOT STARTED",
-    statusColor: "text-foreground/15",
+    statusColor: "text-foreground/55",
     tasks: [
       "Install UE5 and learn core systems",
       "Complete 3 tutorial projects (twin-stick, third-person, FPS)",
@@ -27,7 +27,7 @@ const phases = [
     title: "CORE MECHANICS",
     duration: "MONTHS 4–7",
     status: "NOT STARTED",
-    statusColor: "text-foreground/15",
+    statusColor: "text-foreground/55",
     tasks: [
       "Implement movement system (walk, run, crouch, prone)",
       "Build weapon system with ammo management",
@@ -46,7 +46,7 @@ const phases = [
     title: "CONTENT & POLISH",
     duration: "MONTHS 8–12",
     status: "NOT STARTED",
-    statusColor: "text-foreground/15",
+    statusColor: "text-foreground/55",
     tasks: [
       "Build Level 1 (The Office Complex) with greyboxing",
       "Implement 3 more enemy types",
@@ -65,7 +65,7 @@ const phases = [
     title: "MULTIPLAYER & TESTING",
     duration: "MONTHS 13–15",
     status: "NOT STARTED",
-    statusColor: "text-foreground/15",
+    statusColor: "text-foreground/55",
     tasks: [
       "Implement co-op networking",
       "Build 4-player campaign mode",
@@ -83,7 +83,7 @@ const phases = [
     title: "SHIP IT",
     duration: "MONTHS 16–18",
     status: "NOT STARTED",
-    statusColor: "text-foreground/15",
+    statusColor: "text-foreground/55",
     tasks: [
       "Final polish and optimization",
       "Marketing push (trailers, demos)",
@@ -110,24 +110,24 @@ export default function TimelinePage() {
       <div className="mb-20">
         <div className="space-y-0">
           {phases.map((phase, i) => (
-            <div key={i} className="flex gap-6 py-6 border-b border-foreground/[0.04]">
+            <div key={i} className="flex gap-6 py-6 border-b border-foreground/[0.08]">
               {/* Phase Number */}
               <div className="w-12 shrink-0">
-                <span className="font-mono text-[10px] text-foreground/10 block mb-1">PHASE</span>
-                <span className="font-mono text-lg text-foreground/20">{phase.num}</span>
+                <span className="font-mono text-[10px] text-foreground/75 block mb-1">PHASE</span>
+                <span className="font-mono text-lg text-foreground/65">{phase.num}</span>
               </div>
 
               {/* Progress Bar */}
-              <div className="w-[2px] bg-foreground/[0.04] relative">
-                <div className="absolute top-0 left-0 w-full h-1/2 bg-amber/10" />
+              <div className="w-[2px] bg-foreground/[0.08] relative">
+                <div className="absolute top-0 left-0 w-full h-1/2 bg-amber/40" />
               </div>
 
               {/* Content */}
               <div className="flex-1">
                 <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 mb-3">
                   <div>
-                    <h3 className="text-[14px] font-medium text-foreground/60">{phase.title}</h3>
-                    <span className="font-mono text-[9px] text-foreground/10 tracking-wider">{phase.duration}</span>
+                    <h3 className="text-[14px] font-medium text-foreground/85">{phase.title}</h3>
+                    <span className="font-mono text-[9px] text-foreground/75 tracking-wider">{phase.duration}</span>
                   </div>
                   <span className={`font-mono text-[9px] tracking-[0.15em] ${phase.statusColor}`}>
                     {phase.status}
@@ -136,44 +136,44 @@ export default function TimelinePage() {
 
                 <ul className="space-y-1 mb-3">
                   {phase.tasks.map((task, j) => (
-                    <li key={j} className="text-[12px] text-foreground/25 font-light flex items-start gap-2">
-                      <span className="text-foreground/10 mt-0.5 shrink-0">—</span>
+                    <li key={j} className="text-[12px] text-foreground/75 font-light flex items-start gap-2">
+                      <span className="text-foreground/75 mt-0.5 shrink-0">—</span>
                       {task}
                     </li>
                   ))}
                 </ul>
 
-                <p className="text-[12px] text-amber/30 font-light mb-2">DELIVERABLE: {phase.deliverable}</p>
-                <p className="text-[11px] text-foreground/15 font-light">RISK: {phase.risk}</p>
+                <p className="text-[12px] text-amber/45 font-light mb-2">DELIVERABLE: {phase.deliverable}</p>
+                <p className="text-[11px] text-foreground/55 font-light">RISK: {phase.risk}</p>
 
                 <div className="flex gap-4 mt-3">
                   {phase.relatedTechnical && (
-                    <Link href={phase.relatedTechnical} className="font-mono text-[9px] text-foreground/10 hover:text-amber/30 transition-colors tracking-wider">
+                    <Link href={phase.relatedTechnical} className="font-mono text-[9px] text-foreground/75 hover:text-amber/45 transition-colors tracking-wider">
                       TECHNICAL &rarr;
                     </Link>
                   )}
                   {phase.relatedGameplay && (
-                    <Link href={phase.relatedGameplay} className="font-mono text-[9px] text-foreground/10 hover:text-amber/30 transition-colors tracking-wider">
+                    <Link href={phase.relatedGameplay} className="font-mono text-[9px] text-foreground/75 hover:text-amber/45 transition-colors tracking-wider">
                       GAMEPLAY &rarr;
                     </Link>
                   )}
                   {phase.relatedLevels && (
-                    <Link href={phase.relatedLevels} className="font-mono text-[9px] text-foreground/10 hover:text-amber/30 transition-colors tracking-wider">
+                    <Link href={phase.relatedLevels} className="font-mono text-[9px] text-foreground/75 hover:text-amber/45 transition-colors tracking-wider">
                       LEVELS &rarr;
                     </Link>
                   )}
                   {phase.relatedLore && (
-                    <Link href={phase.relatedLore} className="font-mono text-[9px] text-foreground/10 hover:text-amber/30 transition-colors tracking-wider">
+                    <Link href={phase.relatedLore} className="font-mono text-[9px] text-foreground/75 hover:text-amber/45 transition-colors tracking-wider">
                       LORE &rarr;
                     </Link>
                   )}
                   {phase.relatedCharacters && (
-                    <Link href={phase.relatedCharacters} className="font-mono text-[9px] text-foreground/10 hover:text-amber/30 transition-colors tracking-wider">
+                    <Link href={phase.relatedCharacters} className="font-mono text-[9px] text-foreground/75 hover:text-amber/45 transition-colors tracking-wider">
                       CHARACTERS &rarr;
                     </Link>
                   )}
                   {phase.relatedTimeline && (
-                    <Link href={phase.relatedTimeline} className="font-mono text-[9px] text-foreground/10 hover:text-amber/30 transition-colors tracking-wider">
+                    <Link href={phase.relatedTimeline} className="font-mono text-[9px] text-foreground/75 hover:text-amber/45 transition-colors tracking-wider">
                       TIMELINE &rarr;
                     </Link>
                   )}
@@ -186,36 +186,36 @@ export default function TimelinePage() {
 
       {/* Timeline Bar Visual */}
       <div className="mb-20">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">18-MONTH ROADMAP</h3>
-        <div className="h-[3px] bg-foreground/[0.04] overflow-hidden flex">
+        <h3 className="font-mono text-[10px] text-foreground/65 tracking-[0.2em] mb-6">18-MONTH ROADMAP</h3>
+        <div className="h-[3px] bg-foreground/[0.08] overflow-hidden flex">
           {phases.map((_, i) => (
             <div
               key={i}
-              className="h-full bg-amber/15 border-r border-foreground/[0.02]"
+              className="h-full bg-amber/45 border-r border-foreground/[0.02]"
               style={{ width: `${[20, 25, 25, 17, 13][i]}%` }}
             />
           ))}
         </div>
         <div className="flex justify-between mt-2">
-          <span className="font-mono text-[9px] text-foreground/10">MONTH 1</span>
-          <span className="font-mono text-[9px] text-foreground/10">MONTH 9</span>
-          <span className="font-mono text-[9px] text-foreground/10">MONTH 18</span>
+          <span className="font-mono text-[9px] text-foreground/75">MONTH 1</span>
+          <span className="font-mono text-[9px] text-foreground/75">MONTH 9</span>
+          <span className="font-mono text-[9px] text-foreground/75">MONTH 18</span>
         </div>
       </div>
 
       {/* Cross-links */}
-      <div className="mt-16 pt-8 border-t border-foreground/[0.06]">
+      <div className="mt-16 pt-8 border-t border-foreground/[0.12]">
         <div className="flex flex-wrap gap-6">
-          <Link href="/technical" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/technical" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             TECHNICAL SPECS &rarr;
           </Link>
-          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             GAMEPLAY SYSTEMS &rarr;
           </Link>
-          <Link href="/journey" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/journey" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             DEV JOURNEY TRACKER &rarr;
           </Link>
-          <Link href="/overview" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/overview" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             PROJECT OVERVIEW &rarr;
           </Link>
         </div>

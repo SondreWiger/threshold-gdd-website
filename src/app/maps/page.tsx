@@ -36,7 +36,7 @@ export default function MapsPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-48px)]">
       {/* Header */}
-      <div className="px-6 md:px-12 py-6 border-b border-foreground/[0.04] bg-background/80 backdrop-blur-xl shrink-0">
+      <div className="px-6 md:px-12 py-6 border-b border-foreground/[0.08] bg-background/80 backdrop-blur-xl shrink-0">
         <div className="flex items-start justify-between mb-6">
           <SectionHeader
             code="08 / MAPS"
@@ -45,7 +45,7 @@ export default function MapsPage() {
           />
           <button
             onClick={() => setShowLegend(!showLegend)}
-            className="font-mono text-[10px] tracking-[0.12em] text-foreground/20 hover:text-foreground/40 transition-colors mt-4"
+            className="font-mono text-[10px] tracking-[0.12em] text-foreground/65 hover:text-foreground/65 transition-colors mt-4"
           >
             {showLegend ? "HIDE" : "SHOW"} LEGEND
           </button>
@@ -60,7 +60,7 @@ export default function MapsPage() {
               className={`px-4 py-1.5 font-mono text-[10px] tracking-[0.12em] transition-all duration-300 rounded-full ${
                 selectedLevel.id === level.id
                   ? "bg-amber/8 text-amber"
-                  : "text-foreground/20 hover:text-foreground/40"
+                  : "text-foreground/65 hover:text-foreground/65"
               }`}
             >
               <span className="inline-block w-1.5 h-1.5 rounded-full mr-2 align-middle" style={{ background: levelColors[level.id] }} />
@@ -71,7 +71,7 @@ export default function MapsPage() {
         </div>
 
         {/* Level meta */}
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] font-mono text-foreground/15">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] font-mono text-foreground/55">
           <span>{selectedLevel.meta.environment}</span>
           <span>·</span>
           <span>{selectedLevel.meta.duration}</span>
@@ -83,11 +83,11 @@ export default function MapsPage() {
 
         {/* Legend */}
         {showLegend && (
-          <div className="mt-4 flex flex-wrap gap-4 py-3 border-t border-foreground/[0.04]">
+          <div className="mt-4 flex flex-wrap gap-4 py-3 border-t border-foreground/[0.08]">
             {markerLegend.map((m) => (
               <div key={m.type} className="flex items-center gap-1.5">
-                <span className="font-mono text-[9px] text-foreground/20">•</span>
-                <span className="font-mono text-[9px] text-foreground/15">{m.label}</span>
+                <span className="font-mono text-[9px] text-foreground/65">•</span>
+                <span className="font-mono text-[9px] text-foreground/55">{m.label}</span>
               </div>
             ))}
           </div>

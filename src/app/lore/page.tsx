@@ -44,11 +44,11 @@ const sections = [
 ];
 
 const entityTypes = [
-  { name: "Skin-Stealers", class: "A", threat: 65, stealth: 90, intelligence: 80, color: "bg-amber/20" },
-  { name: "Hounds", class: "B", threat: 75, stealth: 40, intelligence: 55, color: "bg-amber/30" },
-  { name: "Graspers", class: "C", threat: 70, stealth: 85, intelligence: 30, color: "bg-amber/25" },
-  { name: "Doppelgangers", class: "D", threat: 50, stealth: 95, intelligence: 90, color: "bg-amber/35" },
-  { name: "Unclassified", class: "E", threat: 85, stealth: 70, intelligence: 60, color: "bg-amber/15" },
+  { name: "Skin-Stealers", class: "A", threat: 65, stealth: 90, intelligence: 80, color: "bg-amber/40" },
+  { name: "Hounds", class: "B", threat: 75, stealth: 40, intelligence: 55, color: "bg-amber/40" },
+  { name: "Graspers", class: "C", threat: 70, stealth: 85, intelligence: 30, color: "bg-amber/45" },
+  { name: "Doppelgangers", class: "D", threat: 50, stealth: 95, intelligence: 90, color: "bg-amber/45" },
+  { name: "Unclassified", class: "E", threat: 85, stealth: 70, intelligence: 60, color: "bg-amber/45" },
 ];
 
 export default function LorePage() {
@@ -72,15 +72,15 @@ export default function LorePage() {
       </div>
 
       {/* Section Tabs */}
-      <div className="flex gap-6 mb-12 border-b border-foreground/[0.06]">
+      <div className="flex gap-6 mb-12 border-b border-foreground/[0.12]">
         {sections.map((s) => (
           <button
             key={s.id}
             onClick={() => setActiveSection(s.id)}
             className={`pb-3 font-mono text-[10px] tracking-[0.15em] transition-colors ${
               activeSection === s.id
-                ? "text-amber/60 border-b border-amber/40"
-                : "text-foreground/20 hover:text-foreground/40"
+                ? "text-amber/75 border-b border-amber/40"
+                : "text-foreground/65 hover:text-foreground/65"
             }`}
           >
             {s.title}
@@ -92,13 +92,13 @@ export default function LorePage() {
       <div className="mb-20">
         <div className="space-y-0">
           {sections.find((s) => s.id === activeSection)?.items.map((item, i) => (
-            <div key={i} className="py-5 border-b border-foreground/[0.04] group">
+            <div key={i} className="py-5 border-b border-foreground/[0.08] group">
               <div className="flex items-start gap-6">
-                <span className="font-mono text-[10px] text-amber/30 w-24 shrink-0 pt-0.5">{item.year}</span>
+                <span className="font-mono text-[10px] text-amber/45 w-24 shrink-0 pt-0.5">{item.year}</span>
                 <div className="flex-1">
-                  <p className="text-[13px] text-foreground/40 font-light leading-relaxed">{item.event}</p>
+                  <p className="text-[13px] text-foreground/65 font-light leading-relaxed">{item.event}</p>
                 </div>
-                <span className="font-mono text-[9px] text-foreground/10 tracking-wider shrink-0">{item.significance}</span>
+                <span className="font-mono text-[9px] text-foreground/75 tracking-wider shrink-0">{item.significance}</span>
               </div>
             </div>
           ))}
@@ -107,13 +107,13 @@ export default function LorePage() {
 
       {/* Entity Visual Comparison */}
       <div className="mb-20">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-8">ENTITY COMPARISON</h3>
+        <h3 className="font-mono text-[10px] text-foreground/65 tracking-[0.2em] mb-8">ENTITY COMPARISON</h3>
         <div className="space-y-6">
           {entityTypes.map((e, i) => (
-            <div key={i} className="py-4 border-b border-foreground/[0.04]">
+            <div key={i} className="py-4 border-b border-foreground/[0.08]">
               <div className="flex items-baseline gap-4 mb-3">
-                <span className="font-mono text-[10px] text-amber/40">CLASS {e.class}</span>
-                <span className="text-[13px] text-foreground/50 font-medium">{e.name}</span>
+                <span className="font-mono text-[10px] text-amber/55">CLASS {e.class}</span>
+                <span className="text-[13px] text-foreground/75 font-medium">{e.name}</span>
               </div>
               <div className="grid grid-cols-3 gap-4">
                 {[
@@ -123,10 +123,10 @@ export default function LorePage() {
                 ].map((stat) => (
                   <div key={stat.label}>
                     <div className="flex items-baseline justify-between mb-1">
-                      <span className="font-mono text-[8px] text-foreground/15 tracking-wider">{stat.label}</span>
-                      <span className="font-mono text-[9px] text-foreground/20">{stat.value}</span>
+                      <span className="font-mono text-[8px] text-foreground/55 tracking-wider">{stat.label}</span>
+                      <span className="font-mono text-[9px] text-foreground/65">{stat.value}</span>
                     </div>
-                    <div className="h-[2px] bg-foreground/[0.04] overflow-hidden">
+                    <div className="h-[2px] bg-foreground/[0.08] overflow-hidden">
                       <div className={`h-full ${e.color}`} style={{ width: `${stat.value}%` }} />
                     </div>
                   </div>
@@ -138,18 +138,18 @@ export default function LorePage() {
       </div>
 
       {/* Cross-links */}
-      <div className="mt-16 pt-8 border-t border-foreground/[0.06]">
+      <div className="mt-16 pt-8 border-t border-foreground/[0.12]">
         <div className="flex flex-wrap gap-6">
-          <Link href="/characters" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/characters" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             FIRETEAM THRESHOLD &rarr;
           </Link>
-          <Link href="/levels" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/levels" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             LEVEL ARCHITECTURE &rarr;
           </Link>
-          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             COMBAT SYSTEMS &rarr;
           </Link>
-          <Link href="/overview" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/overview" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             PROJECT OVERVIEW &rarr;
           </Link>
         </div>

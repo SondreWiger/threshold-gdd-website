@@ -88,19 +88,19 @@ export default function CharactersPage() {
         {characters.map((char, i) => (
           <div
             key={i}
-            className="py-6 border-b border-foreground/[0.04] cursor-pointer group"
+            className="py-6 border-b border-foreground/[0.08] cursor-pointer group"
             onClick={() => setExpanded(expanded === i ? null : i)}
           >
             <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
               <div className="flex-1">
                 <div className="flex items-baseline gap-3 mb-1">
-                  <h3 className="text-[14px] font-medium text-foreground/70 group-hover:text-amber/70 transition-colors">
+                  <h3 className="text-[14px] font-medium text-foreground/95 group-hover:text-amber/85 transition-colors">
                     {char.name}
                   </h3>
-                  <span className="font-mono text-[9px] text-foreground/10 tracking-wider">{char.role}</span>
+                  <span className="font-mono text-[9px] text-foreground/75 tracking-wider">{char.role}</span>
                 </div>
-                <p className="text-[13px] text-foreground/25 font-light leading-relaxed max-w-xl">
-                  <span className="text-foreground/40">{char.arc}</span>
+                <p className="text-[13px] text-foreground/75 font-light leading-relaxed max-w-xl">
+                  <span className="text-foreground/65">{char.arc}</span>
                 </p>
               </div>
 
@@ -109,41 +109,41 @@ export default function CharactersPage() {
                 {Object.entries(char.stats).map(([key, val]) => (
                   <div key={key} className="w-16">
                     <div className="flex items-baseline justify-between mb-1">
-                      <span className="font-mono text-[8px] text-foreground/15 tracking-wider uppercase">{key.slice(0, 4)}</span>
-                      <span className="font-mono text-[9px] text-foreground/20">{val}</span>
+                      <span className="font-mono text-[8px] text-foreground/55 tracking-wider uppercase">{key.slice(0, 4)}</span>
+                      <span className="font-mono text-[9px] text-foreground/65">{val}</span>
                     </div>
-                    <div className="h-[2px] bg-foreground/[0.04] overflow-hidden">
-                      <div className="h-full bg-amber/30" style={{ width: `${val}%` }} />
+                    <div className="h-[2px] bg-foreground/[0.08] overflow-hidden">
+                      <div className="h-full bg-amber/40" style={{ width: `${val}%` }} />
                     </div>
                   </div>
                 ))}
               </div>
 
-              <span className="font-mono text-[10px] text-foreground/10 group-hover:text-amber/30 transition-colors">
+              <span className="font-mono text-[10px] text-foreground/75 group-hover:text-amber/45 transition-colors">
                 {expanded === i ? "−" : "+"}
               </span>
             </div>
 
             {/* Expanded Detail */}
             {expanded === i && (
-              <div className="mt-4 pt-4 border-t border-foreground/[0.04] pl-4">
-                <p className="text-[13px] text-foreground/35 font-light leading-relaxed mb-4 max-w-2xl">
+              <div className="mt-4 pt-4 border-t border-foreground/[0.08] pl-4">
+                <p className="text-[13px] text-foreground/85 font-light leading-relaxed mb-4 max-w-2xl">
                   {char.arcDetail}
                 </p>
-                <blockquote className="text-[13px] text-foreground/20 font-light italic border-l border-amber/10 pl-3 mb-4 max-w-xl">
+                <blockquote className="text-[13px] text-foreground/65 font-light italic border-l border-amber/10 pl-3 mb-4 max-w-xl">
                   &quot;{char.voice}&quot;
                 </blockquote>
                 <div className="flex gap-4">
-                  <Link href={char.relatedLevel} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                  <Link href={char.relatedLevel} className="font-mono text-[9px] text-foreground/55 hover:text-amber/55 transition-colors tracking-wider">
                     RELATED LEVELS &rarr;
                   </Link>
                   {char.relatedGameplay && (
-                    <Link href={char.relatedGameplay} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                    <Link href={char.relatedGameplay} className="font-mono text-[9px] text-foreground/55 hover:text-amber/55 transition-colors tracking-wider">
                       COMBAT SYSTEMS &rarr;
                     </Link>
                   )}
                   {char.relatedLore && (
-                    <Link href={char.relatedLore} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                    <Link href={char.relatedLore} className="font-mono text-[9px] text-foreground/55 hover:text-amber/55 transition-colors tracking-wider">
                       ASYNC LORE &rarr;
                     </Link>
                   )}
@@ -156,7 +156,7 @@ export default function CharactersPage() {
 
       {/* Squad Relationships Visual */}
       <div className="mt-20">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-8">SQUAD RELATIONSHIPS</h3>
+        <h3 className="font-mono text-[10px] text-foreground/65 tracking-[0.2em] mb-8">SQUAD RELATIONSHIPS</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             { from: "MAYA → DIEGO", type: "TRUST", strength: 95, desc: "Diego follows Maya without question. She sees him as the squad's backbone." },
@@ -166,14 +166,14 @@ export default function CharactersPage() {
             { from: "DIEGO → RIVER", type: "PROTECTION", strength: 88, desc: "Diego tries to shield River from the worst of it, but she's already seeing things." },
             { from: "DIEGO → JAMES", type: "RELIANCE", strength: 80, desc: "Diego depends on James to keep him grounded. When James falters, so does Diego." },
           ].map((rel, i) => (
-            <div key={i} className="py-4 border-b border-foreground/[0.04]">
+            <div key={i} className="py-4 border-b border-foreground/[0.08]">
               <div className="flex items-baseline justify-between mb-2">
-                <span className="font-mono text-[9px] text-foreground/25 tracking-wider">{rel.from}</span>
-                <span className="font-mono text-[9px] text-amber/40 tracking-wider">{rel.type}</span>
+                <span className="font-mono text-[9px] text-foreground/75 tracking-wider">{rel.from}</span>
+                <span className="font-mono text-[9px] text-amber/55 tracking-wider">{rel.type}</span>
               </div>
-              <p className="text-[12px] text-foreground/25 font-light leading-relaxed mb-2">{rel.desc}</p>
-              <div className="h-[2px] bg-foreground/[0.04] overflow-hidden">
-                <div className="h-full bg-amber/20" style={{ width: `${rel.strength}%` }} />
+              <p className="text-[12px] text-foreground/75 font-light leading-relaxed mb-2">{rel.desc}</p>
+              <div className="h-[2px] bg-foreground/[0.08] overflow-hidden">
+                <div className="h-full bg-amber/40" style={{ width: `${rel.strength}%` }} />
               </div>
             </div>
           ))}
@@ -181,18 +181,18 @@ export default function CharactersPage() {
       </div>
 
       {/* Cross-links */}
-      <div className="mt-16 pt-8 border-t border-foreground/[0.06]">
+      <div className="mt-16 pt-8 border-t border-foreground/[0.12]">
         <div className="flex flex-wrap gap-6">
-          <Link href="/levels" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/levels" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             EXPLORE THE LEVELS &rarr;
           </Link>
-          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             COMBAT & SURVIVAL &rarr;
           </Link>
-          <Link href="/lore" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/lore" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             ASYNC TECHNOLOGIES &rarr;
           </Link>
-          <Link href="/overview" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/overview" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             PROJECT OVERVIEW &rarr;
           </Link>
         </div>

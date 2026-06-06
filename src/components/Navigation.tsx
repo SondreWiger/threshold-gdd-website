@@ -29,7 +29,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-full px-6 md:px-12">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <span className="font-mono text-[11px] tracking-[0.25em] text-foreground/60 group-hover:text-amber transition-colors duration-300">
+            <span className="font-mono text-[11px] tracking-[0.25em] text-foreground/85 group-hover:text-amber transition-colors duration-300">
               THRESHOLD
             </span>
           </Link>
@@ -45,7 +45,7 @@ export default function Navigation() {
                   className={`px-3 py-1.5 font-mono text-[10px] tracking-[0.12em] transition-all duration-300 rounded-full ${
                     isActive
                       ? "text-amber bg-amber/8"
-                      : "text-foreground/30 hover:text-foreground/60"
+                      : "text-foreground/55 hover:text-foreground/85"
                   }`}
                 >
                   {item.label}
@@ -57,14 +57,14 @@ export default function Navigation() {
           {/* Mobile toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-foreground/40 hover:text-foreground/70 transition-colors p-1"
+            className="md:hidden text-foreground/65 hover:text-foreground/95 transition-colors p-1"
           >
             {isOpen ? <X size={16} /> : <Menu size={16} />}
           </button>
         </div>
 
         {/* Subtle bottom line */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/[0.04]" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/[0.08]" />
       </header>
 
       {/* Mobile nav — full screen, minimal */}
@@ -82,17 +82,17 @@ export default function Navigation() {
                     className={`flex items-center gap-4 py-3 font-mono text-sm tracking-wide transition-all duration-300 ${
                       isActive
                         ? "text-amber"
-                        : "text-foreground/25 hover:text-foreground/50"
+                        : "text-foreground/75 hover:text-foreground/75"
                     }`}
                   >
-                    <span className="text-[10px] text-foreground/15 w-5">{item.code}</span>
+                    <span className="text-[10px] text-foreground/55 w-5">{item.code}</span>
                     {item.label}
                   </Link>
                 );
               })}
             </nav>
             <div className="mt-12">
-              <p className="font-mono text-[9px] text-foreground/15 tracking-[0.2em]">
+              <p className="font-mono text-[9px] text-foreground/55 tracking-[0.2em]">
                 NORTHEM DEVELOPMENTS
               </p>
             </div>

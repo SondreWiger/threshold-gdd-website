@@ -85,15 +85,15 @@ export default function GameplayPage() {
       </div>
 
       {/* System Tabs */}
-      <div className="flex gap-6 mb-12 border-b border-foreground/[0.06]">
+      <div className="flex gap-6 mb-12 border-b border-foreground/[0.12]">
         {systems.map((sys, i) => (
           <button
             key={sys.id}
             onClick={() => setActiveSystem(i)}
             className={`pb-3 font-mono text-[10px] tracking-[0.15em] transition-colors ${
               activeSystem === i
-                ? "text-amber/60 border-b border-amber/40"
-                : "text-foreground/20 hover:text-foreground/40"
+                ? "text-amber/75 border-b border-amber/40"
+                : "text-foreground/65 hover:text-foreground/65"
             }`}
           >
             {sys.title}
@@ -104,32 +104,32 @@ export default function GameplayPage() {
       {/* Active System Detail */}
       <div className="mb-20">
         <div className="mb-6">
-          <h3 className="text-[18px] font-light text-foreground/70 mb-2">{systems[activeSystem].title}</h3>
-          <p className="text-[14px] text-foreground/30 font-light">{systems[activeSystem].desc}</p>
+          <h3 className="text-[18px] font-light text-foreground/95 mb-2">{systems[activeSystem].title}</h3>
+          <p className="text-[14px] text-foreground/55 font-light">{systems[activeSystem].desc}</p>
         </div>
 
         <div className="space-y-0">
           {systems[activeSystem].details.map((d, i) => (
-            <div key={i} className="py-5 border-b border-foreground/[0.04]">
-              <h4 className="text-[13px] font-medium text-foreground/50 mb-1">{d.label}</h4>
-              <p className="text-[13px] text-foreground/25 font-light leading-relaxed max-w-2xl">{d.desc}</p>
+            <div key={i} className="py-5 border-b border-foreground/[0.08]">
+              <h4 className="text-[13px] font-medium text-foreground/75 mb-1">{d.label}</h4>
+              <p className="text-[13px] text-foreground/75 font-light leading-relaxed max-w-2xl">{d.desc}</p>
             </div>
           ))}
         </div>
 
         <div className="flex gap-4 mt-6">
           {systems[activeSystem].relatedCharacters && (
-            <Link href={systems[activeSystem].relatedCharacters} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+            <Link href={systems[activeSystem].relatedCharacters} className="font-mono text-[9px] text-foreground/55 hover:text-amber/55 transition-colors tracking-wider">
               SQUAD MEMBERS &rarr;
             </Link>
           )}
           {systems[activeSystem].relatedLevels && (
-            <Link href={systems[activeSystem].relatedLevels} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+            <Link href={systems[activeSystem].relatedLevels} className="font-mono text-[9px] text-foreground/55 hover:text-amber/55 transition-colors tracking-wider">
               LEVEL DESIGN &rarr;
             </Link>
           )}
           {systems[activeSystem].relatedTimeline && (
-            <Link href={systems[activeSystem].relatedTimeline} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+            <Link href={systems[activeSystem].relatedTimeline} className="font-mono text-[9px] text-foreground/55 hover:text-amber/55 transition-colors tracking-wider">
               PRODUCTION TIMELINE &rarr;
             </Link>
           )}
@@ -138,7 +138,7 @@ export default function GameplayPage() {
 
       {/* Equipment Tiers Visual */}
       <div className="mb-20">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">EQUIPMENT TIERS</h3>
+        <h3 className="font-mono text-[10px] text-foreground/65 tracking-[0.2em] mb-6">EQUIPMENT TIERS</h3>
         <div className="space-y-3">
           {[
             { tier: "TIER 1", name: "Standard Issue", items: "Pistol, flashlight, radio", bar: 20 },
@@ -148,14 +148,14 @@ export default function GameplayPage() {
             { tier: "TIER 5", name: "Anomalous", items: "Reality-anchored gear, entity tech", bar: 100 },
           ].map((t, i) => (
             <div key={i} className="flex items-center gap-4">
-              <span className="font-mono text-[9px] text-amber/30 w-14 shrink-0">{t.tier}</span>
+              <span className="font-mono text-[9px] text-amber/45 w-14 shrink-0">{t.tier}</span>
               <div className="flex-1">
                 <div className="flex items-baseline justify-between mb-1">
-                  <span className="text-[12px] text-foreground/35 font-light">{t.name}</span>
-                  <span className="font-mono text-[9px] text-foreground/10">{t.items}</span>
+                  <span className="text-[12px] text-foreground/85 font-light">{t.name}</span>
+                  <span className="font-mono text-[9px] text-foreground/75">{t.items}</span>
                 </div>
-                <div className="h-[2px] bg-foreground/[0.04] overflow-hidden">
-                  <div className="h-full bg-amber/20" style={{ width: `${t.bar}%` }} />
+                <div className="h-[2px] bg-foreground/[0.08] overflow-hidden">
+                  <div className="h-full bg-amber/40" style={{ width: `${t.bar}%` }} />
                 </div>
               </div>
             </div>
@@ -164,18 +164,18 @@ export default function GameplayPage() {
       </div>
 
       {/* Cross-links */}
-      <div className="mt-16 pt-8 border-t border-foreground/[0.06]">
+      <div className="mt-16 pt-8 border-t border-foreground/[0.12]">
         <div className="flex flex-wrap gap-6">
-          <Link href="/characters" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/characters" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             MEET THE SQUAD &rarr;
           </Link>
-          <Link href="/levels" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/levels" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             EXPLORE THE LEVELS &rarr;
           </Link>
-          <Link href="/lore" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/lore" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             THE LORE &rarr;
           </Link>
-          <Link href="/technical" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/technical" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             TECHNICAL SPECS &rarr;
           </Link>
         </div>

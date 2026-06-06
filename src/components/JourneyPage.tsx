@@ -61,7 +61,7 @@ function TaskCheckbox({
       </div>
       <span
         className={`text-[13px] leading-none transition-all duration-300 ${
-          checked ? "text-foreground/25 line-through" : "text-foreground/70 group-hover:text-foreground/90"
+          checked ? "text-foreground/75 line-through" : "text-foreground/95 group-hover:text-foreground/95"
         }`}
       >
         {label}
@@ -94,30 +94,30 @@ function GoalCard({
           <div className="flex items-center gap-3">
             <h4
               className={`text-[13px] font-medium tracking-wide transition-colors duration-300 ${
-                isComplete ? "text-foreground/30" : "text-foreground/80"
+                isComplete ? "text-foreground/55" : "text-foreground/80"
               }`}
             >
               {goal.title}
             </h4>
             {isComplete && (
-              <span className="font-mono text-[9px] text-foreground/20 tracking-[0.15em]">
+              <span className="font-mono text-[9px] text-foreground/65 tracking-[0.15em]">
                 DONE
               </span>
             )}
           </div>
-          <p className="font-mono text-[10px] text-foreground/20 mt-1 tracking-wide">
+          <p className="font-mono text-[10px] text-foreground/65 mt-1 tracking-wide">
             {goal.description}
           </p>
         </div>
 
         <div className="flex items-center gap-3 flex-shrink-0">
-          <span className="font-mono text-[10px] text-foreground/20">
+          <span className="font-mono text-[10px] text-foreground/65">
             {completed}/{total}
           </span>
           {isOpen ? (
-            <ChevronDown size={12} className="text-foreground/15" />
+            <ChevronDown size={12} className="text-foreground/55" />
           ) : (
-            <ChevronRight size={12} className="text-foreground/15" />
+            <ChevronRight size={12} className="text-foreground/55" />
           )}
         </div>
       </button>
@@ -136,7 +136,7 @@ function GoalCard({
         </div>
       )}
 
-      <div className="mt-6 h-px bg-foreground/[0.04]" />
+      <div className="mt-6 h-px bg-foreground/[0.08]" />
     </div>
   );
 }
@@ -168,29 +168,29 @@ function PhaseSection({
         className="w-full text-left group"
       >
         <div className="flex items-baseline gap-4 mb-2">
-          <span className="font-mono text-[10px] text-foreground/20 tracking-[0.2em]">
+          <span className="font-mono text-[10px] text-foreground/65 tracking-[0.2em]">
             {phase.code}
           </span>
           <h2
             className={`text-2xl md:text-3xl font-light tracking-tight transition-colors duration-300 ${
-              isComplete ? "text-foreground/30" : "text-foreground/90"
+              isComplete ? "text-foreground/55" : "text-foreground/95"
             }`}
           >
             {phase.title}
           </h2>
           {isComplete && (
-            <span className="font-mono text-[9px] text-foreground/15 tracking-[0.2em] ml-2">
+            <span className="font-mono text-[9px] text-foreground/55 tracking-[0.2em] ml-2">
               COMPLETE
             </span>
           )}
           {isActive && (
-            <span className="font-mono text-[9px] text-amber/60 tracking-[0.2em] ml-2">
+            <span className="font-mono text-[9px] text-amber/75 tracking-[0.2em] ml-2">
               ACTIVE
             </span>
           )}
         </div>
 
-        <p className="font-mono text-[11px] text-foreground/25 tracking-wide max-w-xl leading-relaxed">
+        <p className="font-mono text-[11px] text-foreground/75 tracking-wide max-w-xl leading-relaxed">
           {phase.subtitle}
         </p>
 
@@ -204,7 +204,7 @@ function PhaseSection({
               style={{ width: `${percent}%` }}
             />
           </div>
-          <span className="font-mono text-[10px] text-foreground/20 tabular-nums">
+          <span className="font-mono text-[10px] text-foreground/65 tabular-nums">
             {completedTasks}/{totalTasks}
           </span>
         </div>
@@ -213,10 +213,10 @@ function PhaseSection({
       {/* Phase content */}
       {isOpen && (
         <div className="mt-6">
-          <p className="font-mono text-[11px] text-foreground/20 leading-relaxed max-w-2xl mb-4">
+          <p className="font-mono text-[11px] text-foreground/65 leading-relaxed max-w-2xl mb-4">
             {phase.description}
           </p>
-          <div className="font-mono text-[10px] text-foreground/15 tracking-wider mb-2">
+          <div className="font-mono text-[10px] text-foreground/55 tracking-wider mb-2">
             {phase.estimatedWeeks}
           </div>
 
@@ -267,13 +267,13 @@ export default function JourneyPage() {
       {/* Hero — large whitespace */}
       <div className="px-6 md:px-12 lg:px-24 pt-20 md:pt-32 pb-16 md:pb-24">
         <div className="max-w-3xl">
-          <span className="font-mono text-[10px] text-foreground/15 tracking-[0.3em] block mb-8">
+          <span className="font-mono text-[10px] text-foreground/55 tracking-[0.3em] block mb-8">
             09 / JOURNEY
           </span>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-foreground/90 mb-6">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-foreground/95 mb-6">
             Dev Journey
           </h1>
-          <p className="text-base md:text-lg text-foreground/30 font-light leading-relaxed max-w-xl">
+          <p className="text-base md:text-lg text-foreground/55 font-light leading-relaxed max-w-xl">
             From zero UE5 knowledge to a playable demo.
             Check off tasks as you go. Progress saves locally.
           </p>
@@ -284,16 +284,16 @@ export default function JourneyPage() {
       <div className="px-6 md:px-12 lg:px-24 pb-16 md:pb-24">
         <div className="max-w-3xl">
           <div className="flex items-baseline justify-between mb-4">
-            <span className="font-mono text-[10px] text-foreground/20 tracking-[0.2em]">
+            <span className="font-mono text-[10px] text-foreground/65 tracking-[0.2em]">
               OVERALL
             </span>
             <span className="font-mono text-3xl md:text-4xl font-light text-foreground/80 tabular-nums">
               {overallPercent}
-              <span className="text-foreground/20">%</span>
+              <span className="text-foreground/65">%</span>
             </span>
           </div>
 
-          <div className="w-full h-[3px] bg-foreground/[0.04] rounded-full overflow-hidden mb-4">
+          <div className="w-full h-[3px] bg-foreground/[0.08] rounded-full overflow-hidden mb-4">
             <div
               className="h-full rounded-full transition-all duration-700 ease-out"
               style={{
@@ -306,16 +306,16 @@ export default function JourneyPage() {
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] text-foreground/20">
+            <span className="font-mono text-[11px] text-foreground/65">
               {getCompletionMessage(overallPercent)}
             </span>
             <div className="flex items-center gap-6">
-              <span className="font-mono text-[10px] text-foreground/15 tabular-nums">
+              <span className="font-mono text-[10px] text-foreground/55 tabular-nums">
                 {completedTasks} / {totalTasks}
               </span>
               <button
                 onClick={resetProgress}
-                className="font-mono text-[10px] text-foreground/15 hover:text-foreground/40 transition-colors tracking-[0.15em]"
+                className="font-mono text-[10px] text-foreground/55 hover:text-foreground/65 transition-colors tracking-[0.15em]"
               >
                 RESET
               </button>
@@ -334,7 +334,7 @@ export default function JourneyPage() {
               return (
                 <div
                   key={phase.id}
-                  className="flex-1 h-[2px] rounded-full overflow-hidden bg-foreground/[0.04]"
+                  className="flex-1 h-[2px] rounded-full overflow-hidden bg-foreground/[0.08]"
                   title={`${phase.title}: ${Math.round(phasePercent)}%`}
                 >
                   <div
@@ -372,10 +372,10 @@ export default function JourneyPage() {
         <div className="max-w-3xl">
           <div className="h-px bg-foreground/[0.06] mb-8" />
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <span className="font-mono text-[9px] text-foreground/10 tracking-[0.2em]">
+            <span className="font-mono text-[9px] text-foreground/75 tracking-[0.2em]">
               THRESHOLD — NORTHEM DEVELOPMENTS
             </span>
-            <span className="font-mono text-[9px] text-foreground/10 tracking-[0.2em]">
+            <span className="font-mono text-[9px] text-foreground/75 tracking-[0.2em]">
               {new Date().toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",

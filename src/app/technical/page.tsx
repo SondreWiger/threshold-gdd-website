@@ -65,18 +65,18 @@ export default function TechnicalPage() {
 
       {/* Core Features */}
       <div className="mb-20">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-8">CORE FEATURES</h3>
+        <h3 className="font-mono text-[10px] text-foreground/65 tracking-[0.2em] mb-8">CORE FEATURES</h3>
         <div className="space-y-0">
           {features.map((f, i) => (
-            <div key={i} className="py-6 border-b border-foreground/[0.04]">
+            <div key={i} className="py-6 border-b border-foreground/[0.08]">
               <div className="flex flex-col md:flex-row md:items-start gap-4">
                 <div className="flex-1">
-                  <h4 className="text-[14px] font-medium text-foreground/60 mb-1">{f.title}</h4>
-                  <p className="text-[13px] text-foreground/25 font-light leading-relaxed max-w-xl">{f.desc}</p>
+                  <h4 className="text-[14px] font-medium text-foreground/85 mb-1">{f.title}</h4>
+                  <p className="text-[13px] text-foreground/75 font-light leading-relaxed max-w-xl">{f.desc}</p>
                 </div>
                 <div className="flex flex-wrap gap-2 shrink-0">
                   {f.tech.map((t) => (
-                    <span key={t} className="font-mono text-[9px] text-amber/30 px-2 py-0.5 bg-amber/[0.05] tracking-wider">
+                    <span key={t} className="font-mono text-[9px] text-amber/45 px-2 py-0.5 bg-amber/[0.05] tracking-wider">
                       {t}
                     </span>
                   ))}
@@ -84,7 +84,7 @@ export default function TechnicalPage() {
               </div>
               {f.relatedLevels && (
                 <div className="flex gap-4 mt-3">
-                  <Link href={f.relatedLevels} className="font-mono text-[9px] text-foreground/15 hover:text-amber/40 transition-colors tracking-wider">
+                  <Link href={f.relatedLevels} className="font-mono text-[9px] text-foreground/55 hover:text-amber/55 transition-colors tracking-wider">
                     {f.relatedLevels === "/levels" ? "LEVELS" : f.relatedLevels === "/characters" ? "CHARACTERS" : "GAMEPLAY"} &rarr;
                   </Link>
                 </div>
@@ -96,19 +96,19 @@ export default function TechnicalPage() {
 
       {/* Platform Targets */}
       <div className="mb-20">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-6">PLATFORM TARGETS</h3>
+        <h3 className="font-mono text-[10px] text-foreground/65 tracking-[0.2em] mb-6">PLATFORM TARGETS</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             { platform: "PC", specs: "Recommended: RTX 3070 / RX 6800, 16GB RAM, SSD. Target: 1440p60.", status: "PRIMARY" },
             { platform: "PS5", specs: "Native port. Ray tracing, DualSense haptics, 3D audio. Target: 4K30 / 1440p60.", status: "DAY ONE" },
             { platform: "XBOX SERIES X|S", specs: "Optimized. Smart Delivery, Game Pass consideration. Target: 4K30 / 1080p60.", status: "DAY ONE" },
           ].map((p) => (
-            <div key={p.platform} className="py-4 border-b border-foreground/[0.04]">
+            <div key={p.platform} className="py-4 border-b border-foreground/[0.08]">
               <div className="flex items-baseline gap-3 mb-2">
-                <span className="text-[14px] text-foreground/50 font-medium">{p.platform}</span>
-                <span className="font-mono text-[9px] text-amber/30 tracking-wider">{p.status}</span>
+                <span className="text-[14px] text-foreground/75 font-medium">{p.platform}</span>
+                <span className="font-mono text-[9px] text-amber/45 tracking-wider">{p.status}</span>
               </div>
-              <p className="text-[12px] text-foreground/25 font-light leading-relaxed">{p.specs}</p>
+              <p className="text-[12px] text-foreground/75 font-light leading-relaxed">{p.specs}</p>
             </div>
           ))}
         </div>
@@ -116,35 +116,35 @@ export default function TechnicalPage() {
 
       {/* Technical Challenges */}
       <div className="mb-20">
-        <h3 className="font-mono text-[10px] text-foreground/20 tracking-[0.2em] mb-8">TECHNICAL CHALLENGES</h3>
+        <h3 className="font-mono text-[10px] text-foreground/65 tracking-[0.2em] mb-8">TECHNICAL CHALLENGES</h3>
         <div className="space-y-4">
           {challenges.map((c, i) => (
-            <div key={i} className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 py-3 border-b border-foreground/[0.04]">
-              <span className="text-[13px] text-foreground/40 flex-1">{c.challenge}</span>
+            <div key={i} className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 py-3 border-b border-foreground/[0.08]">
+              <span className="text-[13px] text-foreground/65 flex-1">{c.challenge}</span>
               <span className={`font-mono text-[9px] tracking-[0.15em] ${
-                c.risk === "HIGH" ? "text-amber/50" : "text-foreground/20"
+                c.risk === "HIGH" ? "text-amber/50" : "text-foreground/65"
               }`}>
                 {c.risk}
               </span>
-              <span className="text-[12px] text-foreground/20 font-light max-w-xs">{c.approach}</span>
+              <span className="text-[12px] text-foreground/65 font-light max-w-xs">{c.approach}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Cross-links */}
-      <div className="mt-16 pt-8 border-t border-foreground/[0.06]">
+      <div className="mt-16 pt-8 border-t border-foreground/[0.12]">
         <div className="flex flex-wrap gap-6">
-          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/gameplay" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             GAMEPLAY SYSTEMS &rarr;
           </Link>
-          <Link href="/levels" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/levels" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             LEVEL DESIGN &rarr;
           </Link>
-          <Link href="/characters" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/characters" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             CHARACTER AI &rarr;
           </Link>
-          <Link href="/overview" className="font-mono text-[10px] text-foreground/15 hover:text-amber/50 transition-colors tracking-wider">
+          <Link href="/overview" className="font-mono text-[10px] text-foreground/55 hover:text-amber/50 transition-colors tracking-wider">
             PROJECT OVERVIEW &rarr;
           </Link>
         </div>
