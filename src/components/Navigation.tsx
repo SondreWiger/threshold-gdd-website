@@ -15,6 +15,7 @@ const navItems = [
   { href: "/technical", label: "TECHNICAL", code: "06" },
   { href: "/timeline", label: "TIMELINE", code: "07" },
   { href: "/maps", label: "MAPS", code: "08" },
+  { href: "/journey", label: "DEV JOURNEY", code: "09" },
 ];
 
 export default function Navigation() {
